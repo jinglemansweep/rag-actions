@@ -45,17 +45,11 @@ jobs:
           query_text: "DevOps"
           top_k: "3"
           template_text: |
-            You are a helpful assistant that provides information about a candidate's skills.
-            Write a summary of the skills in the first person from the perspective of the candidate.
+            ${{ vars.PROMPT_RAG_SKILLS }}
             The candidate has the following skills:
-
-            <skills>
             {% for doc in docs %}
-              <skill>
-                {{ doc.page_content }}
-              </skill>
+            - "{{ doc.page_content }}"
             {% endfor %}
-            </skills>
       - name: Template Output
         run: |
           echo "${{ steps.query_template.outputs.text }}"
