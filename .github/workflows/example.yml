@@ -24,7 +24,7 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
-          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}"
+          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           ingest_dir: "./test/content/skills/devops"
           ingest_metadata: '{"category": "devops"}'
       - name: Produce RAG Prompt
@@ -35,7 +35,7 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
-          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}"
+          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           query_text: "devops"
           top_k: "3"
           template_text: |
@@ -52,7 +52,7 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
-          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}"
+          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           prompt_text: ${{ steps.rag_prompt.outputs.text }}
       - name: Chat Output
         run: |
