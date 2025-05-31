@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     from ..config import base_config, get_env_var
 
-    query_text_input = get_env_var("INGEST_TEXT")
+    query_text_input = get_env_var("QUERY_TEXT")
     top_k = get_env_var("TOP_K", "5", int)
 
     openai_embeddings = get_openai_embeddings(
