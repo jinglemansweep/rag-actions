@@ -51,4 +51,4 @@ if __name__ == "__main__":
         query=query_text_input, docs=documents
     )
     logger.info(f"Rendered Template:\n\n{rendered}")
-    set_action_ouput("text", rendered, multiline=True)
+    set_action_ouput("text", rendered, base64=True)

@@ -1,6 +1,7 @@
 import dataclasses
 import logging
 import os
+from base64 import b64encode
 from typing import Dict, Optional
 from .constants import BaseConfig
 
@@ -49,14 +50,15 @@ def introduce(
     return message
 
 
-def set_action_ouput(name: str, value: str, multiline=False) -> None:
+def set_action_ouput(name: str, value: str, base64=False, encoding="utf-8") -> None:
     """
     Set an output variable for GitHub Actions.
     """
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
-            if multiline:
-                print(f"{name}<<EOF\n{value}\nEOF", file=fh)
+            if base64:
+                value_b64 = b64encode(value.encode(encoding)).decode(encoding)
+                print(f"{name}={value_b64}", file=fh)
             else:
                 print(f"{name}={value}", file=fh)
     except Exception as e:
