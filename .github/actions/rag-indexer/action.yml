@@ -38,8 +38,8 @@ inputs:
     default: ""
 
 runs:
-  using: "docker"
-  image: "../Dockerfile"
+  using: docker
+  image: ../../Dockerfile
   env:
     OPENAI_API_KEY: ${{ inputs.openai_api_key }}
     EMBEDDING_MODEL: ${{ inputs.embedding_model }}
