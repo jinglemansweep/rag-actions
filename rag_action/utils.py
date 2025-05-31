@@ -1,4 +1,5 @@
 import logging
+import os
 
 # LOG_FORMAT = "%(name)-25s %(levelname)-7s %(message)s"
 LOG_FORMAT = "%(message)s"
@@ -12,7 +13,8 @@ LOG_LEVELS = {
 }
 
 
-def setup_logger(log_level: str) -> None:
+def setup_logger() -> None:
+    log_level = os.getenv("LOG_LEVEL", "info").lower()
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpcore").setLevel(logging.WARNING)
     logging.getLogger("langsmith.utils").setLevel(logging.ERROR)

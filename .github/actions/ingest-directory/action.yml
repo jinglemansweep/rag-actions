@@ -1,5 +1,5 @@
 name: "RAG Directory Ingest"
-description: "Loads text or webpages, chunks, creates embeddings, stores in Supabase"
+description: "Loads content from a directory, chunks, creates embeddings, stores in Supabase"
 author: "JingleManSweep"
 
 inputs:

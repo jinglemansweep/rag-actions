@@ -1,5 +1,5 @@
-name: "RAG Text Ingest"
-description: "Loads text, chunks, creates embeddings, stores in Supabase"
+name: "RAG Query Search"
+description: "Perform a search query against the RAG system and return results"
 author: "JingleManSweep"
 
 inputs:
@@ -19,21 +19,13 @@ inputs:
   supabase_table:
     description: "Supabase table name"
     required: true
-  chunk_size:
-    description: "Chunk size for text splitting"
-    required: false
-    default: "500"
-  chunk_overlap:
-    description: "Chunk overlap for text splitting"
-    required: false
-    default: "50"
-  ingest_text:
-    description: "Text to ingest"
+  query_text:
+    description: "Text to query against the RAG system"
     required: true
-  ingest_metadata:
-    description: "Metadata for the ingestion"
+  top_k:
+    description: "Number of top results to return"
     required: false
-    default: "{}"
+    default: "5"
 
 runs:
   using: docker
@@ -44,8 +36,6 @@ runs:
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
-    CHUNK_SIZE: ${{ inputs.chunk_size }}
-    CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
-    INGEST_TEXT: ${{ inputs.ingest_text }}
-    INGEST_METADATA: ${{ inputs.ingest_metadata }}
-  args: ["-m", "rag_action.ingest.text"]
+    QUERY_TEXT: ${{ inputs.query_text }}
+    TOP_K: ${{ inputs.top_k }}
+  args: ["-m", "rag_action.query.search"]

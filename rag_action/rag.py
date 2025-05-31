@@ -14,7 +14,7 @@ from typing import Dict, List
 
 from .utils import setup_logger
 
-setup_logger(os.getenv("LOG_LEVEL", "info").lower())
+setup_logger()
 logger = logging.getLogger(__name__)
 
 

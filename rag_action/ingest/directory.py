@@ -1,5 +1,4 @@
 import logging
-import os
 from ..rag import (
     chunk_documents,
     parse_metadata,
@@ -11,7 +10,7 @@ from ..rag import (
 from ..supabase import create_client as create_supabase_client
 from ..utils import setup_logger
 
-setup_logger(os.getenv("LOG_LEVEL", "info").lower())
+setup_logger()
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
