@@ -4,7 +4,7 @@ from ..rag import (
     supabase_query,
 )
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce
+from ..utils import setup_logger, introduce, set_action_ouput
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -42,7 +42,5 @@ if __name__ == "__main__":
     )
 
     logger.info(f"Found {len(documents)} documents for query: {query_text_input}")
-    logger.info("Documents:")
-    for doc in documents:
-        content = doc.page_content[:40].replace("\n", " ")
-        logger.info(f"- Content: {content}... {doc.metadata}")
+    logger.info("Documents:\n\n{documents}")
+    set_action_ouput("json", {"documents": documents}, output_json=True)

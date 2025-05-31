@@ -57,13 +57,14 @@ def bash_escape(s):
     return "'" + s.replace("'", "'\\''") + "'"
 
 
-def set_action_ouput(name: str, value: str, output_json=False) -> None:
+def set_action_ouput(name: str, value: str | dict, output_json=False) -> None:
     """
     Set an output variable for GitHub Actions.
     """
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
             if output_json:
+                value = json.loads(value) if isinstance(value, str) else value
                 print(f"{name}={json.dumps(value, separators=(',', ':'))}", file=fh)
             else:
                 print(f"{name}={value}", file=fh)
