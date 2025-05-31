@@ -1,4 +1,4 @@
-name: "LangChain RAG Indexer"
+name: "RAG Text Ingest"
 description: "Loads text or webpages, chunks, creates embeddings, stores in Supabase"
 author: "JingleManSweep"
 

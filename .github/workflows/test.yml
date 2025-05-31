@@ -19,7 +19,6 @@ jobs:
       - name: Run RAG Indexer Action (Directory Ingestion)
         uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
         with:
-          action_mode: ingest
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
@@ -35,7 +34,6 @@ jobs:
       - name: Run RAG Indexer Action (Text Ingestion)
         uses: jinglemansweep/rag-actions/.github/actions/ingest-text@main
         with:
-          action_mode: ingest
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
