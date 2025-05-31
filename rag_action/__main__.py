@@ -68,12 +68,12 @@ def store_in_supabase(chunks, vectors):
     for chunk, vector in zip(chunks, vectors):
         chunk_hash = compute_chunk_hash(chunk.page_content)
         # Query for this hash
-        existing = supabase.table(STORAGE_TABLE).select('id').eq('chunk_hash', chunk_hash).execute()
+        existing = supabase.table(SUPABASE_TABLE).select('id').eq('chunk_hash', chunk_hash).execute()
         if existing.data:
             print(f"Skipping duplicate chunk (hash: {chunk_hash})")
             continue
         print(f"Inserting new chunk (hash: {chunk_hash})")
-        data, count = supabase.table(STORAGE_TABLE).insert([{
+        data, count = supabase.table(SUPABASE_TABLE).insert([{
             "content": chunk.page_content,
             "metadata": chunk.metadata,
             "chunk_hash": chunk_hash,
