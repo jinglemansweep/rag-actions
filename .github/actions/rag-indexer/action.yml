@@ -3,6 +3,13 @@ description: "Loads text or webpages, chunks, creates embeddings, stores in Supa
 author: "JingleManSweep"
 
 inputs:
+  action_mode:
+    description: "Action mode: 'ingest' for ingestion, 'query' for querying"
+    required: true
+    default: "query"
+    options:
+      - "ingest"
+      - "query"
   openai_api_key:
     description: "OpenAI API Key"
     required: true
@@ -53,7 +60,7 @@ runs:
   using: docker
   image: ../../../Dockerfile
   env:
-    ACTION_MODE: "ingest"
+    ACTION_MODE: ${{ inputs.action_mode }}
     OPENAI_API_KEY: ${{ inputs.openai_api_key }}
     EMBEDDING_MODEL: ${{ inputs.embedding_model }}
     SUPABASE_URL: ${{ inputs.supabase_url }}
