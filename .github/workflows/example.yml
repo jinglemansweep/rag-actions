@@ -11,12 +11,13 @@ on:
 
 jobs:
 
-  IngestDirectorySkillsDevOps:
+  ExampleWorkflow:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Directory Ingestion
+      - name: Ingest Skills Directory
+        id: ingest_skills
         uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -26,16 +27,10 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}"
           ingest_dir: "./test/content/skills/devops"
           ingest_metadata: '{"category": "devops"}'
-
-  QueryTemplateSkillsDevOps:
-    runs-on: ubuntu-latest
-    needs:
-      - IngestDirectorySkillsDevOps
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Query Template
-        id: query_template
+      - name: Produce RAG Prompt
+        id: rag_prompt
+        needs:
+          - ingest_skills
         uses: jinglemansweep/rag-actions/.github/actions/query-template@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -51,19 +46,10 @@ jobs:
             {% for doc in docs %}
             <skill>{{ doc.page_content }}</skill>
             {% endfor %}
-      - name: Template Output
-        run: |
-          echo "${{ steps.query_template.outputs.text }}"
-
-  ChatSkillsDevOps:
-    runs-on: ubuntu-latest
-    needs:
-      - QueryTemplateSkillsDevOps
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Chat
         id: chat
+        needs:
+          - rag_prompt
         uses: jinglemansweep/rag-actions/.github/actions/infer-chat@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -71,7 +57,7 @@ jobs:
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}"
-          query_text: ${{ jobs.QueryTemplateSkillsDevOps.outputs.text }}
-      - name: Template Output
+          query_text: ${{ steps.rag_prompt.outputs.text }}
+      - name: Chat Output
         run: |
           echo "${{ steps.chat.outputs.text }}"
