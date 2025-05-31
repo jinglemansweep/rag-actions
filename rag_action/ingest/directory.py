@@ -4,7 +4,7 @@ from ..rag import (
     parse_metadata,
     get_openai_embeddings,
     build_document_embeddings,
-    store_in_supabase,
+    supabase_write,
     ingest_directory,
 )
 from ..supabase import create_client as create_supabase_client
@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     doc_embeddings = build_document_embeddings(chunks, openai_embeddings)
 
-    store_in_supabase(
+    supabase_write(
         chunks,
         doc_embeddings,
         supabase_client=supabase_client,

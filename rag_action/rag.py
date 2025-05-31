@@ -81,7 +81,7 @@ def build_metadata_filter(db_collection: str) -> dict:
     return {"_collection": db_collection}
 
 
-def query_vector_store(
+def supabase_query(
     query: str,
     supabase_client: Client,
     db_table: str,
@@ -99,10 +99,14 @@ def query_vector_store(
         query_name="match_documents",
     )
     filter = build_metadata_filter(db_collection)
-    return vectorstore.similarity_search(query, top_k, filter)
+    docs = vectorstore.similarity_search(query, top_k, filter)
+    logger.info(
+        f"Vector Store Query: table='{db_table}' collection='{db_collection}' query='{query}' top_k={top_k} found={len(docs)}"
+    )
+    return docs
 
 
-def store_in_supabase(
+def supabase_write(
     chunks: List[Document],
     vectors: List[List[float]],
     supabase_client: Client,

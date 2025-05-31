@@ -1,7 +1,7 @@
 import logging
 from ..rag import (
     get_openai_embeddings,
-    query_vector_store,
+    supabase_query,
 )
 from ..supabase import create_client as create_supabase_client
 from ..utils import setup_logger, introduce
@@ -32,7 +32,7 @@ if __name__ == "__main__":
         base_config.supabase_url, base_config.supabase_key
     )
 
-    documents = query_vector_store(
+    documents = supabase_query(
         query_text_input,
         supabase_client=supabase_client,
         db_table=base_config.supabase_table,
