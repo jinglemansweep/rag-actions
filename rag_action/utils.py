@@ -47,3 +47,14 @@ def introduce(
         for k, v in metadata.items():
             message += f"  - {k}: {v}\n"
     return message
+
+
+def set_action_ouput(name: str, value: str) -> None:
+    """
+    Set an output variable for GitHub Actions.
+    """
+    try:
+        with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
+            print(f"{name}={value}", file=fh)
+    except Exception as e:
+        logging.warning(f"Failed to set GitHub Actions output: {e}")

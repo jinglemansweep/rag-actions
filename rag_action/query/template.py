@@ -5,7 +5,7 @@ from ..rag import (
     supabase_query,
 )
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce
+from ..utils import setup_logger, introduce, set_action_ouput
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -47,12 +47,11 @@ if __name__ == "__main__":
         top_k=top_k,
     )
 
-    print(documents)
-
     rendered = Template(template_text_input).render(
         query=query_text_input, docs=documents
     )
-
     logger.info(f"Rendered Template:\n\n{rendered}")
+
+    set_action_ouput("output_text", rendered)
 
     logger.info("Done!")
