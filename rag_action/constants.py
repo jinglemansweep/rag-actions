@@ -11,4 +11,5 @@ class BaseConfig:
     supabase_url: str
     supabase_key: str
     supabase_table: str
+    supabase_collection: str
     embedding_model: str

@@ -19,6 +19,9 @@ inputs:
   supabase_table:
     description: "Supabase table name"
     required: true
+  supabase_collection:
+    description: "Supabase collection name"
+    required: true
   chunk_size:
     description: "Chunk size for text splitting"
     required: false
@@ -44,6 +47,7 @@ runs:
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
+    SUPABASE_COLLECTION: ${{ inputs.supabase_collection }}
     CHUNK_SIZE: ${{ inputs.chunk_size }}
     CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
     INGEST_TEXT: ${{ inputs.ingest_text }}

@@ -19,6 +19,9 @@ inputs:
   supabase_table:
     description: "Supabase table name"
     required: true
+  supabase_collection:
+    description: "Supabase collection name"
+    required: true
   query_text:
     description: "Text to query against the RAG system"
     required: true
@@ -36,6 +39,7 @@ runs:
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
+    SUPABASE_COLLECTION: ${{ inputs.supabase_collection }}
     QUERY_TEXT: ${{ inputs.query_text }}
     TOP_K: ${{ inputs.top_k }}
   args: ["-m", "rag_action.query.search"]

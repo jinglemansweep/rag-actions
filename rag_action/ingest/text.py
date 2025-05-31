@@ -22,7 +22,7 @@ if __name__ == "__main__":
     ingest_text_input = get_env_var("INGEST_TEXT")
     ingest_metadata = get_env_var("INGEST_METADATA", "{}")
 
-    metadata = parse_metadata(ingest_metadata)
+    metadata = parse_metadata(ingest_metadata, base_config.supabase_collection)
 
     logger.info(
         introduce(

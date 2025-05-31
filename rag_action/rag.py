@@ -60,22 +60,32 @@ def compute_chunk_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def parse_metadata(metadata_str: str) -> Dict:
+def parse_metadata(metadata_str: str, db_collection: str) -> Dict:
     """
     Parse metadata from a JSON string.
     """
     try:
         metadata = json.loads(metadata_str)
+        metadata["_collection"] = db_collection
         return metadata
     except json.JSONDecodeError as e:
         logger.warning(f"Invalid JSON in metadata: {e}")
         return {}
 
 
+def build_metadata_filter(db_collection: str) -> dict:
+    """
+    Build a filter for querying documents.
+    This can be customized based on your requirements.
+    """
+    return {"_collection": db_collection}
+
+
 def query_vector_store(
     query: str,
     supabase_client: Client,
     db_table: str,
+    db_collection: str,
     embeddings: OpenAIEmbeddings,
     top_k: int = 5,
 ) -> List[Document]:
@@ -88,8 +98,8 @@ def query_vector_store(
         embedding=embeddings,
         query_name="match_documents",
     )
-    retriever = vectorstore.as_retriever(search_kwargs={"k": top_k})
-    return retriever.invoke(query)
+    filter = build_metadata_filter(db_collection)
+    return vectorstore.similarity_search(query, top_k, filter)
 
 
 def store_in_supabase(

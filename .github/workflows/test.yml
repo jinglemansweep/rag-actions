@@ -23,6 +23,7 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: documents
+          supabase_collection: "ci"
           ingest_dir: "./test/content"
           ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
 
@@ -38,6 +39,7 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: "documents"
+          supabase_collection: "ci"
           ingest_text: |
             This is a test text to be ingested into the RAG system.
             It will be chunked and stored in the Supabase database.
@@ -56,5 +58,6 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: "documents"
-          query_text: "What is the purpose of this test?"
+          supabase_collection: "ci"
+          query_text: "What is GitHub Run ID?"
           top_k: "5"

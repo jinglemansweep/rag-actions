@@ -21,7 +21,7 @@ if __name__ == "__main__":
         introduce(
             "Query Vector Store",
             base_config,
-            {"query_text_input": query_text_input, "top_k": top_k},
+            {"query_text": query_text_input, "top_k": top_k},
         )
     )
 
@@ -36,6 +36,7 @@ if __name__ == "__main__":
         query_text_input,
         supabase_client=supabase_client,
         db_table=base_config.supabase_table,
+        db_collection=base_config.supabase_collection,
         embeddings=openai_embeddings,
         top_k=top_k,
     )

@@ -20,5 +20,6 @@ base_config = BaseConfig(
     supabase_url=get_env_var("SUPABASE_URL"),
     supabase_key=get_env_var("SUPABASE_KEY"),
     supabase_table=get_env_var("SUPABASE_TABLE"),
+    supabase_collection=get_env_var("SUPABASE_COLLECTION"),
     embedding_model=get_env_var("EMBEDDING_MODEL", "text-embedding-ada-002"),
 )

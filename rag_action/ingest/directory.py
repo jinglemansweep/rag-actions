@@ -23,7 +23,7 @@ if __name__ == "__main__":
     ingest_glob_pattern = get_env_var("INGEST_GLOB_PATTERN", "*.*")
     ingest_metadata = get_env_var("INGEST_METADATA", "{}")
 
-    metadata = parse_metadata(ingest_metadata)
+    metadata = parse_metadata(ingest_metadata, base_config.supabase_collection)
 
     logger.info(
         introduce(
@@ -32,7 +32,7 @@ if __name__ == "__main__":
             {
                 "chunk_size": chunk_size,
                 "chunk_overlap": chunk_overlap,
-                "ingest_dir_input": ingest_dir_input,
+                "ingest_dir": ingest_dir_input,
                 "ingest_glob_pattern": ingest_glob_pattern,
                 "ingest_metadata": ingest_metadata,
             },
