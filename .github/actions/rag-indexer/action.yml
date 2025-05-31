@@ -28,14 +28,18 @@ inputs:
     description: "Chunk overlap for text splitting"
     required: false
     default: "50"
-  content_dir:
-    description: "Directory containing content"
+  ingest_dir:
+    description: "Content ingestion directory"
     required: false
     default: ""
-  content_url:
-    description: "URL to crawl"
+  ingest_text:
+    description: "Text to ingest"
     required: false
     default: ""
+  ingest_metadata:
+    description: "Metadata for the ingestion"
+    required: false
+    default: "{}"
 
 runs:
   using: docker
@@ -49,4 +53,6 @@ runs:
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
     CHUNK_SIZE: ${{ inputs.chunk_size }}
     CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
-    CONTENT_DIR: ${{ inputs.content_dir }}
+    INGEST_DIR: ${{ inputs.ingest_dir }}
+    INGEST_TEXT: ${{ inputs.ingest_text }}
+    INGEST_METADATA: ${{ inputs.ingest_metadata }}

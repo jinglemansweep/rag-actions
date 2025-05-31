@@ -1,4 +1,5 @@
 import hashlib
+import json
 import logging
 import os
 import sys
@@ -8,22 +9,38 @@ from langchain_community.document_loaders import TextLoader  # , UnstructuredURL
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
+from pathlib import Path
 from supabase import create_client, Client  # type: ignore
-from typing import List
+from typing import Dict, List
 from .utils import setup_logger
 
 setup_logger(os.getenv("LOG_LEVEL", "info").lower())
 logger = logging.getLogger(__name__)
 
 
-def load_directory(directory: str, pattern="*.md") -> List[Document]:
+def ingest_directory(directory: str, metadata: Dict, pattern="*.md") -> List[Document]:
     docs: List[Document] = []
-    if settings.content_dir:
+    if Path(settings.ingest_dir).exists():
         for file_path in glob.glob(os.path.join(directory, pattern)):
-            print(f"Loading file: {file_path}")
+            logger.info(f"Loading file: {file_path}")
             docs.extend(TextLoader(file_path).load())
     else:
         logger.warning("No CONTENT_DIR specified.")
+    for doc in docs:
+        doc_metadata = metadata.copy()
+        doc_metadata.update(doc.metadata or {})
+        doc_metadata["loader"] = "directory"
+        doc.metadata = doc_metadata
+    return docs
+
+
+def ingest_text(text: str, metadata: Dict) -> List[Document]:
+    docs = [Document(page_content=settings.ingest_text, metadata=metadata)]
+    for doc in docs:
+        doc_metadata = metadata.copy()
+        doc_metadata.update(doc.metadata or {})
+        doc_metadata["loader"] = "text"
+        doc.metadata = doc_metadata
     return docs
 
 
@@ -76,23 +93,24 @@ def query_vector_store(
 def store_in_supabase(
     chunks: List[Document],
     vectors: List[List[float]],
-    db_url: str,
+    supabase_client: Client,
     db_table: str,
-    api_key: str,
 ) -> None:
-    supabase: Client = create_client(db_url, api_key)
     for chunk, vector in zip(chunks, vectors):
         chunk_hash = compute_chunk_hash(chunk.page_content)
         # Query for this hash
         existing = (
-            supabase.table(db_table).select("id").eq("chunk_hash", chunk_hash).execute()
+            supabase_client.table(db_table)
+            .select("id")
+            .eq("chunk_hash", chunk_hash)
+            .execute()
         )
         if existing.data:
             logger.info(f"Skipping duplicate chunk (hash: {chunk_hash})")
             continue
         logger.info(f"Inserting new chunk (hash: {chunk_hash})")
         data, count = (
-            supabase.table(db_table)
+            supabase_client.table(db_table)
             .insert(
                 [
                     {
@@ -111,39 +129,60 @@ if __name__ == "__main__":
 
     from .config import settings
 
-    if settings.action_mode == "ingest":
-        documents = load_directory(settings.content_dir)
-    else:
-        logger.fatal("Invalid ACTION_MODE. Use 'ingest' to load and process documents.")
-        sys.exit(1)
-
     openai_embeddings = OpenAIEmbeddings(
         model=settings.embedding_model, api_key=settings.openai_api_key
     )
 
     supabase_client = create_client(settings.supabase_url, settings.supabase_key)
 
-    vs_docs = query_vector_store(
-        "Hello",
-        supabase_client=supabase_client,
-        db_table=settings.supabase_table,
-        embeddings=openai_embeddings,
-    )
+    if settings.action_mode == "query":
 
-    logger.info(f"Found {len(vs_docs)} documents in vector store.")
+        vs_docs = query_vector_store(
+            "Hello",
+            supabase_client=supabase_client,
+            db_table=settings.supabase_table,
+            embeddings=openai_embeddings,
+        )
+        logger.info(f"Found {len(vs_docs)} documents in vector store.")
 
-    chunks = chunk_documents(
-        documents, chunk_size=settings.chunk_size, chunk_overlap=settings.chunk_overlap
-    )
+    elif settings.action_mode == "ingest":
 
-    embeddings = get_openai_embeddings(chunks, openai_embeddings)
+        try:
+            metadata = (
+                json.loads(settings.ingest_metadata) if settings.ingest_metadata else {}
+            )
+        except json.JSONDecodeError:
+            metadata = {}
+        logger.info(f"Metadata for ingestion: {metadata}")
 
-    store_in_supabase(
-        chunks,
-        embeddings,
-        db_url=settings.supabase_url,
-        db_table=settings.supabase_table,
-        api_key=settings.supabase_key,
-    )
+        if len(settings.ingest_dir) > 0 and Path(settings.ingest_dir).exists():
+            documents = ingest_directory(
+                settings.ingest_dir, metadata, settings.ingest_pattern
+            )
+        elif len(settings.ingest_text) > 0:
+            documents = ingest_text(settings.ingest_text, metadata)
+
+        else:
+            logger.fatal("No content to ingest. Provide either a directory or text.")
+            sys.exit(1)
+
+        chunks = chunk_documents(
+            documents,
+            chunk_size=settings.chunk_size,
+            chunk_overlap=settings.chunk_overlap,
+        )
+
+        embeddings = get_openai_embeddings(chunks, openai_embeddings)
+
+        store_in_supabase(
+            chunks,
+            embeddings,
+            supabase_client=supabase_client,
+            db_table=settings.supabase_table,
+        )
+
+    else:
+        logger.fatal("Invalid ACTION_MODE. Use 'ingest' to load and process documents.")
+        sys.exit(1)
 
     logger.info("Done!")

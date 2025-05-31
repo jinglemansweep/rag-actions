@@ -30,12 +30,14 @@ class Config:
     supabase_table: str
     chunk_size: int
     chunk_overlap: int
-    content_dir: str
-    content_text: str
+    ingest_dir: str
+    ingest_pattern: str
+    ingest_text: str
+    ingest_metadata: str
 
 
 settings = Config(
-    action_mode=os.getenv("ACTION_MODE", ""),
+    action_mode=os.getenv("ACTION_MODE", "ingest"),
     openai_api_key=os.getenv("OPENAI_API_KEY", ""),
     embedding_model=os.getenv("EMBEDDING_MODEL", "text-embedding-ada-002"),
     supabase_url=os.getenv("SUPABASE_URL", ""),
@@ -43,6 +45,8 @@ settings = Config(
     supabase_table=os.getenv("SUPABASE_TABLE", "documents"),
     chunk_size=int(os.getenv("CHUNK_SIZE", "500")),
     chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "50")),
-    content_dir=os.getenv("CONTENT_DIR", ""),
-    content_text=os.getenv("CONTENT_TEXT", ""),
+    ingest_dir=os.getenv("INGEST_DIR", ""),
+    ingest_pattern=os.getenv("INGEST_PATTERN", "*.*"),
+    ingest_text=os.getenv("INGEST_TEXT", ""),
+    ingest_metadata=os.getenv("INGEST_METADATA", "{}"),
 )
