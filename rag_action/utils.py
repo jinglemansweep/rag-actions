@@ -1,4 +1,5 @@
 import dataclasses
+import json
 import logging
 import os
 from typing import Dict, Optional
@@ -56,16 +57,15 @@ def bash_escape(s):
     return "'" + s.replace("'", "'\\''") + "'"
 
 
-def set_action_ouput(name: str, value: str, multiline=False) -> None:
+def set_action_ouput(name: str, value: str, output_json=False) -> None:
     """
     Set an output variable for GitHub Actions.
     """
-    escaped_value = bash_escape(value)
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
-            if multiline:
-                print(f"{name}<<EOF\n{escaped_value}\nEOF", file=fh)
+            if output_json:
+                print(f"{name}={json.dumps(value, separators=(',', ':'))}", file=fh)
             else:
-                print(f"{name}={escaped_value}", file=fh)
+                print(f"{name}={value}", file=fh)
     except Exception as e:
         logging.warning(f"Failed to set GitHub Actions output: {e}")
