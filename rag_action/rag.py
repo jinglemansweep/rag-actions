@@ -4,6 +4,8 @@ import json
 import logging
 import os
 from langchain_core.documents import Document
+from langchain_core.messages import BaseMessage
+from langchain.chat_models import init_chat_model
 from langchain_community.document_loaders import TextLoader  # , UnstructuredURLLoader
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -16,6 +18,15 @@ from .utils import setup_logger
 
 setup_logger()
 logger = logging.getLogger(__name__)
+
+
+def model_chat(prompt: str, chat_model: str) -> BaseMessage:
+    """
+    Perform a chat with the model.
+    """
+    llm = init_chat_model(model=chat_model)
+    response = llm.invoke(prompt)
+    return response
 
 
 def chunk_documents(
