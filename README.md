@@ -4,7 +4,11 @@
 
 ![Logo](./docs/images/logo.png)
 
-A collection of GitHub Actions that provide typical [Langchain](https://www.langchain.com/) RAG workflows such as content indexing, chunking and embedding. The resulting embeddings are then stored in [Supabase](https://supabase.com/) tables.
+A collection of GitHub Actions that provide typical [Langchain](https://www.langchain.com/) RAG workflows such as content indexing, chunking and embedding. The resulting embeddings are then stored in [Supabase](https://supabase.com/) tables for retrieval and querying.
+
+## Setup
+
+Create a Supabase account and database and create required vector tables using the provided [example SQL file](./supabase/table.sql).
 
 ## Indexer Action
 
