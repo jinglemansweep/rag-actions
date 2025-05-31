@@ -22,8 +22,8 @@ jobs:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: documents
-          supabase_collection: "ci"
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
           ingest_dir: "./test/content"
           ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
 
@@ -38,8 +38,8 @@ jobs:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: "documents"
-          supabase_collection: "ci"
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
           ingest_text: |
             This is a test text to be ingested into the RAG system.
             It will be chunked and stored in the Supabase database.
@@ -57,7 +57,7 @@ jobs:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: "documents"
-          supabase_collection: "ci"
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
           query_text: "What is GitHub Run ID?"
           top_k: "5"
