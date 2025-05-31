@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from .constants import BaseConfig
 
 
 def get_env_var(var_name: str, default=None, cast_type=str):
@@ -13,19 +13,6 @@ def get_env_var(var_name: str, default=None, cast_type=str):
         return cast_type(value)
     except ValueError as e:
         raise ValueError(f"Invalid value for {var_name}: {value}") from e
-
-
-@dataclass
-class BaseConfig:
-    """
-    Base Configuration
-    """
-
-    openai_api_key: str
-    supabase_url: str
-    supabase_key: str
-    supabase_table: str
-    embedding_model: str
 
 
 base_config = BaseConfig(

@@ -8,7 +8,7 @@ from ..rag import (
     ingest_text,
 )
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger
+from ..utils import setup_logger, introduce
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -22,13 +22,28 @@ if __name__ == "__main__":
     ingest_text_input = get_env_var("INGEST_TEXT")
     ingest_metadata = get_env_var("INGEST_METADATA", "{}")
 
+    metadata = parse_metadata(ingest_metadata)
+
+    logger.info(
+        introduce(
+            "Ingest Text",
+            base_config,
+            {
+                "chunk_size": chunk_size,
+                "chunk_overlap": chunk_overlap,
+                "ingest_text_input": ingest_text_input,
+                "ingest_metadata": ingest_metadata,
+            },
+            metadata,
+        )
+    )
+
     openai_embeddings = get_openai_embeddings(
         model=base_config.embedding_model, api_key=base_config.openai_api_key
     )
     supabase_client = create_supabase_client(
         base_config.supabase_url, base_config.supabase_key
     )
-    metadata = parse_metadata(ingest_metadata)
 
     documents = ingest_text(ingest_text_input, metadata)
 

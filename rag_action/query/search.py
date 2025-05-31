@@ -4,7 +4,7 @@ from ..rag import (
     query_vector_store,
 )
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger
+from ..utils import setup_logger, introduce
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -16,6 +16,14 @@ if __name__ == "__main__":
 
     query_text_input = get_env_var("QUERY_TEXT")
     top_k = get_env_var("TOP_K", "5", int)
+
+    logger.info(
+        introduce(
+            "Query Vector Store",
+            base_config,
+            {"query_text_input": query_text_input, "top_k": top_k},
+        )
+    )
 
     openai_embeddings = get_openai_embeddings(
         model=base_config.embedding_model, api_key=base_config.openai_api_key
@@ -33,5 +41,9 @@ if __name__ == "__main__":
     )
 
     logger.info(f"Found {len(documents)} documents for query: {query_text_input}")
+    logger.info("Documents:")
+    for doc in documents:
+        content = doc.page_content[:40].replace("\n", " ")
+        logger.info(f"- Content: {content}... {doc.metadata}")
 
     logger.info("Done!")

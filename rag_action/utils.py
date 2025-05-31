@@ -1,5 +1,8 @@
+import dataclasses
 import logging
 import os
+from typing import Dict, Optional
+from .constants import BaseConfig
 
 # LOG_FORMAT = "%(name)-25s %(levelname)-7s %(message)s"
 LOG_FORMAT = "%(message)s"
@@ -21,3 +24,26 @@ def setup_logger() -> None:
     logging.basicConfig(
         level=LOG_LEVELS.get(log_level, logging.INFO), format=LOG_FORMAT
     )
+
+
+def introduce(
+    name: str, config: BaseConfig, params: dict, metadata: Optional[Dict] = None
+) -> str:
+    """
+    Print a formatted introduction message.
+    """
+    message = ""
+    message += f"{'=' * 80}\n{name}\n{'=' * 80}\n\n"
+    message += "Configuration:\n"
+    for k, v in dataclasses.asdict(config).items():
+        if k in ["openai_api_key", "supabase_key"]:
+            v = "********"
+        message += f"  - {k}: {v}\n"
+    message += "Parameters:\n"
+    for k, v in params.items():
+        message += f"  - {k}: {v}\n"
+    if metadata:
+        message += "Metadata:\n"
+        for k, v in metadata.items():
+            message += f"  - {k}: {v}\n"
+    return message
