@@ -61,8 +61,8 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           prompt_text: |
             ${{ vars.PROMPT_RAG }}
-            ${{ steps.rag_prompt.outputs.text }}
+            ${{ steps.rag_prompt.outputs.json }}
 
       - name: Chat Output
         run: |
-          echo "${{ steps.chat.outputs.text }}"
+          echo "${{ steps.chat.outputs.json }}"
