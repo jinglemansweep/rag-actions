@@ -53,7 +53,7 @@ def bash_escape(s):
     """
     Escape string for safe use as a bash variable value.
     """
-    return s.replace('"', "'")
+    return "'" + s.replace("'", "'\\''") + "'"
 
 
 def set_action_ouput(name: str, value: str, multiline=False) -> None:
