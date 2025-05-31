@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     from ..config import base_config, get_env_var
 
-    chunk_size = get_env_var("CHUNK_SIZE", 2000, int)
+    chunk_size = get_env_var("CHUNK_SIZE", 10000, int)
     chunk_overlap = get_env_var("CHUNK_OVERLAP", 200, int)
     ingest_dir_input = get_env_var("INGEST_DIR")
     ingest_glob_pattern = get_env_var("INGEST_GLOB_PATTERN", "*.*")
