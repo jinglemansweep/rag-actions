@@ -48,8 +48,6 @@ jobs:
             Content: {{ doc.page_content }}
             Metadata: {{ doc.metadata }}
             {% endfor %}
-      - name: Debug Output
+      - name: Template Output
         run: |
-          echo "Template Output:"
-          echo
           echo "${{ steps.query_template.outputs.text }}"
