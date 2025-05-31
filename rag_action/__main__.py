@@ -45,7 +45,7 @@ def chunk_documents(
 def get_openai_embeddings(
     texts: List[Document], api_key: str, model: str
 ) -> List[List[float]]:
-    embeddings = OpenAIEmbeddings(openai_api_key=api_key, model=model)
+    embeddings = OpenAIEmbeddings(api_key=api_key, model=model)
     return embeddings.embed_documents([chunk.page_content for chunk in texts])
 
 
