@@ -11,5 +11,3 @@ WORKDIR /app
 COPY ./pyproject.toml ./poetry.lock /app/
 RUN . /venv/bin/activate && /venv/bin/poetry install --no-root
 COPY . /app/
-
-ENTRYPOINT ["/venv/bin/python", "-m", "rag_action"]

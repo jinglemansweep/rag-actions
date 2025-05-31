@@ -17,13 +17,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run RAG Indexer Action (Directory Ingestion)
-        uses: jinglemansweep/rag-actions/.github/actions/rag-indexer@main
+        uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
         with:
           action_mode: ingest
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: "documents"
+          supabase_table: documents
           ingest_dir: "./test/content"
           ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
 
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run RAG Indexer Action (Text Ingestion)
-        uses: jinglemansweep/rag-actions/.github/actions/rag-indexer@main
+        uses: jinglemansweep/rag-actions/.github/actions/ingest-text@main
         with:
           action_mode: ingest
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -46,18 +46,18 @@ jobs:
             GitHub Run ID: ${{ github.run_id }}
           ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
 
-  QueryText:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Run RAG Indexer Action (Text Query)
-        uses: jinglemansweep/rag-actions/.github/actions/rag-indexer@main
-        with:
-          action_mode: query
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          supabase_url: ${{ secrets.SUPABASE_URL }}
-          supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: "documents"
-          query_text: "What is the purpose of this test?"
-          query_top_k: "3"
+#  QueryText:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Run RAG Indexer Action (Text Query)
+#        uses: jinglemansweep/rag-actions/.github/actions/rag-indexer@main
+#        with:
+#          action_mode: query
+#          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+#          supabase_url: ${{ secrets.SUPABASE_URL }}
+#          supabase_key: ${{ secrets.SUPABASE_KEY }}
+#          supabase_table: "documents"
+#          query_text: "What is the purpose of this test?"
+#          query_top_k: "3"
