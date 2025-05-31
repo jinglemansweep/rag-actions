@@ -52,6 +52,6 @@ if __name__ == "__main__":
     )
     logger.info(f"Rendered Template:\n\n{rendered}")
 
-    set_action_ouput("output_text", rendered)
+    set_action_ouput("text", rendered)
 
     logger.info("Done!")
