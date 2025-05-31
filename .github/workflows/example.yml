@@ -43,7 +43,9 @@ jobs:
           query_text: "DevOps"
           top_k: "3"
           template_text: |
-            You are a helpful assistant that provides information about a candidate's skills. The candidate has the following skills:
+            You are a helpful assistant that provides information about a candidate's skills.
+            Write a summary of the skills in the first person from the perspective of the candidate.
+            The candidate has the following skills:
 
             <skills>
             {% for doc in docs %}
