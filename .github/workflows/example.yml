@@ -48,7 +48,7 @@ jobs:
             ${{ vars.PROMPT_RAG_SKILLS }}
             The candidate has the following skills:
             {% for doc in docs %}
-            - "{{ doc.page_content }}"
+            <skill>{{ doc.page_content }}</skill>
             {% endfor %}
       - name: Template Output
         run: |
