@@ -45,19 +45,3 @@ jobs:
             It will be chunked and stored in the Supabase database.
             GitHub Run ID: ${{ github.run_id }}
           ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
-
-  QuerySearch:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Query Search
-        uses: jinglemansweep/rag-actions/.github/actions/query-search@main
-        with:
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          supabase_url: ${{ secrets.SUPABASE_URL }}
-          supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: ${{ vars.SUPABASE_TABLE }}
-          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
-          query_text: "What is GitHub Run ID?"
-          top_k: "5"
