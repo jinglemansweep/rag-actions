@@ -48,6 +48,7 @@ if __name__ == "__main__":
     )
 
     documents = ingest_directory(ingest_dir_input, metadata, ingest_glob_pattern)
+    print(documents)
 
     chunks = chunk_documents(
         documents,
