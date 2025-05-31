@@ -38,5 +38,8 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: "documents"
-          ingest_text: "HELLO WORLD"
+          ingest_text: |
+            This is a test text to be ingested into the RAG system.
+            It will be chunked and stored in the Supabase database.
+            GitHub Run ID: ${{ github.run_id }}
           ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
