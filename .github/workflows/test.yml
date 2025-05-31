@@ -1,3 +1,5 @@
+name: "Actions Test"
+
 on:
   push:
     branches:
