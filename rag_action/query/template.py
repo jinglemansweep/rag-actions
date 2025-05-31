@@ -52,6 +52,4 @@ if __name__ == "__main__":
     )
     logger.info(f"Rendered Template:\n\n{rendered}")
 
-    set_action_ouput("text", rendered)
-
-    logger.info("Done!")
+    set_action_ouput("text", rendered, multiline=True)

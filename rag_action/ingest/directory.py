@@ -63,5 +63,3 @@ if __name__ == "__main__":
         supabase_client=supabase_client,
         db_table=base_config.supabase_table,
     )
-
-    logger.info("Done!")

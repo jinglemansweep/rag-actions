@@ -49,12 +49,15 @@ def introduce(
     return message
 
 
-def set_action_ouput(name: str, value: str) -> None:
+def set_action_ouput(name: str, value: str, multiline=False) -> None:
     """
     Set an output variable for GitHub Actions.
     """
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
-            print(f"{name}<<EOF\n{value}\nEOF", file=fh)
+            if multiline:
+                print(f"{name}<<EOF\n{value}\nEOF", file=fh)
+            else:
+                print(f"{name}={value}", file=fh)
     except Exception as e:
         logging.warning(f"Failed to set GitHub Actions output: {e}")

@@ -67,7 +67,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Query Search
+      - name: Query Template
         id: query_template
         uses: jinglemansweep/rag-actions/.github/actions/query-template@main
         with:

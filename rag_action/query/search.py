@@ -46,5 +46,3 @@ if __name__ == "__main__":
     for doc in documents:
         content = doc.page_content[:40].replace("\n", " ")
         logger.info(f"- Content: {content}... {doc.metadata}")
-
-    logger.info("Done!")
