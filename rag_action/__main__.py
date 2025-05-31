@@ -11,10 +11,12 @@ from supabase import create_client, Client
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-ada-002")
+
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-STORAGE_TABLE = os.getenv("STORAGE_TABLE", "rag_chunks")
-DOCS_DIR = os.getenv("DOCS_DIR")  # Directory with *.txt files
+SUPABASE_TABLE = os.getenv("SUPABASE_TABLE", "rag_chunks")
+
+DOCS_DIR = os.getenv("DOCS_DIR")  # Directory with *.md files
 URL = os.getenv("URL")            # Or provide a single URL
 
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "500"))

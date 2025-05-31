@@ -16,7 +16,7 @@ inputs:
   supabase_key:
     description: "Supabase service role key"
     required: true
-  storage_table:
+  supabase_table:
     description: "Supabase table name"
     required: false
     default: "rag_chunks"
@@ -45,7 +45,7 @@ runs:
     EMBEDDING_MODEL: ${{ inputs.embedding_model }}
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
-    STORAGE_TABLE: ${{ inputs.storage_table }}
+    SUPABASE_TABLE: ${{ inputs.supabase_table }}
     CHUNK_SIZE: ${{ inputs.chunk_size }}
     CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
     DOCS_DIR: ${{ inputs.docs_dir }}
