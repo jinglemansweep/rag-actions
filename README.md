@@ -1,6 +1,6 @@
 # RAG GitHub Actions
 
-[![.github/workflows/test.yml](https://github.com/jinglemansweep/rag-actions/actions/workflows/test.yml/badge.svg)](https://github.com/jinglemansweep/rag-actions/actions/workflows/test.yml)
+[![.github/workflows/test.yml](https://github.com/jinglemansweep/rag-actions/actions/workflows/test.yml/badge.svg)](https://github.com/jinglemansweep/rag-actions/actions/workflows/test.yml) [![Black](https://github.com/jinglemansweep/rag-actions/actions/workflows/black.yml/badge.svg)](https://github.com/jinglemansweep/rag-actions/actions/workflows/black.yml) [![Flake8](https://github.com/jinglemansweep/rag-actions/actions/workflows/flake8.yml/badge.svg)](https://github.com/jinglemansweep/rag-actions/actions/workflows/flake8.yml) [![MyPy](https://github.com/jinglemansweep/rag-actions/actions/workflows/mypy.yml/badge.svg)](https://github.com/jinglemansweep/rag-actions/actions/workflows/mypy.yml)
 
 ![Logo](./docs/images/logo.png)
 
