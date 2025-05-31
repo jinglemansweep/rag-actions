@@ -23,7 +23,7 @@ jobs:
           embedding_model: "text-embedding-ada-002"
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: "rag_chunks"
+          supabase_table: "documents"
           chunk_size: "500"
           chunk_overlap: "50"
           content_dir: "./test/content"

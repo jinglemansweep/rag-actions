@@ -8,7 +8,7 @@ A collection of GitHub Actions that provide typical [Langchain](https://www.lang
 
 ## Setup
 
-Create a Supabase account and database and create required vector tables using the provided [example SQL file](./supabase/table.sql).
+Create a Supabase account and database and create required vector tables and functions using the provided [example SQL file](./supabase/setup.sql).
 
 ## Indexer Action
 

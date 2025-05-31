@@ -5,6 +5,7 @@ import sys
 import glob
 from langchain_core.documents import Document
 from langchain_community.document_loaders import TextLoader  # , UnstructuredURLLoader
+from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
 from supabase import create_client, Client  # type: ignore
@@ -43,9 +44,8 @@ def chunk_documents(
 
 
 def get_openai_embeddings(
-    texts: List[Document], api_key: str, model: str
+    texts: List[Document], embeddings: OpenAIEmbeddings
 ) -> List[List[float]]:
-    embeddings = OpenAIEmbeddings(api_key=api_key, model=model)
     return embeddings.embed_documents([chunk.page_content for chunk in texts])
 
 
@@ -54,6 +54,23 @@ def compute_chunk_hash(text: str) -> str:
     Compute a hash of chunk text for deduplication.
     """
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def query_vector_store(
+    query: str,
+    supabase_client: Client,
+    db_table: str,
+    embeddings: OpenAIEmbeddings,
+    top_k: int = 5,
+) -> List[Document]:
+    vectorstore = SupabaseVectorStore(
+        client=supabase_client,
+        table_name=db_table,
+        embedding=embeddings,
+        query_name="match_documents",
+    )
+    retriever = vectorstore.as_retriever(search_kwargs={"k": top_k})
+    return retriever.invoke(query)
 
 
 def store_in_supabase(
@@ -100,12 +117,25 @@ if __name__ == "__main__":
         logger.fatal("Invalid ACTION_MODE. Use 'ingest' to load and process documents.")
         sys.exit(1)
 
+    openai_embeddings = OpenAIEmbeddings(
+        model=settings.embedding_model, api_key=settings.openai_api_key
+    )
+
+    supabase_client = create_client(settings.supabase_url, settings.supabase_key)
+
+    vs_docs = query_vector_store(
+        "Hello",
+        supabase_client=supabase_client,
+        db_table=settings.supabase_table,
+        embeddings=openai_embeddings,
+    )
+
     chunks = chunk_documents(
         documents, chunk_size=settings.chunk_size, chunk_overlap=settings.chunk_overlap
     )
-    embeddings = get_openai_embeddings(
-        chunks, api_key=settings.openai_api_key, model=settings.embedding_model
-    )
+
+    embeddings = get_openai_embeddings(chunks, openai_embeddings)
+
     store_in_supabase(
         chunks,
         embeddings,
