@@ -130,6 +130,8 @@ if __name__ == "__main__":
         embeddings=openai_embeddings,
     )
 
+    logger.info(f"Found {len(vs_docs)} documents in vector store.")
+
     chunks = chunk_documents(
         documents, chunk_size=settings.chunk_size, chunk_overlap=settings.chunk_overlap
     )
