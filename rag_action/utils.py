@@ -63,8 +63,9 @@ def set_action_ouput(name: str, value: str | dict, output_json=False) -> None:
     """
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
+            print(value)
             if output_json:
-                value = json.loads(value) if isinstance(value, str) else value
+                value = {"value": value} if isinstance(value, str) else value
                 print(f"{name}={json.dumps(value, separators=(',', ':'))}", file=fh)
             else:
                 print(f"{name}={value}", file=fh)
