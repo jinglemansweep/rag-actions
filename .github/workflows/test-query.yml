@@ -1,0 +1,55 @@
+name: "Tests: Query"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  QuerySearch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Query Search
+        uses: jinglemansweep/rag-actions/.github/actions/query-search@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
+          query_text: "What is GitHub Run ID?"
+          top_k: "5"
+
+  QueryTemplate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Query Template
+        id: query_template
+        uses: jinglemansweep/rag-actions/.github/actions/query-template@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
+          query_text: "What is GitHub Run ID?"
+          top_k: "5"
+          template_text: |
+            {% for doc in docs %}
+            Content: {{ doc.page_content }}
+            Metadata: {{ doc.metadata }}
+            {% endfor %}
+      - name: Debug Output
+        run: |
+          echo "Template Output:"
+          echo
+          echo "${{ steps.query_template.outputs.text }}"

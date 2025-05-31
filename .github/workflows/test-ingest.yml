@@ -1,0 +1,63 @@
+name: "Tests: Ingestion"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+  IngestDirectory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Directory Ingestion
+        uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
+          ingest_dir: "./test/content"
+          ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
+
+  IngestText:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Text Ingestion
+        uses: jinglemansweep/rag-actions/.github/actions/ingest-text@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
+          ingest_text: |
+            This is a test text to be ingested into the RAG system.
+            It will be chunked and stored in the Supabase database.
+            GitHub Run ID: ${{ github.run_id }}
+          ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
+
+  QuerySearch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Query Search
+        uses: jinglemansweep/rag-actions/.github/actions/query-search@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
+          query_text: "What is GitHub Run ID?"
+          top_k: "5"
