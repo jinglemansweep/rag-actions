@@ -137,13 +137,20 @@ if __name__ == "__main__":
 
     if settings.action_mode == "query":
 
-        vs_docs = query_vector_store(
-            "Hello",
-            supabase_client=supabase_client,
-            db_table=settings.supabase_table,
-            embeddings=openai_embeddings,
-        )
-        logger.info(f"Found {len(vs_docs)} documents in vector store.")
+        if len(settings.query_text) > 0:
+            vs_docs = query_vector_store(
+                settings.query_text,
+                supabase_client=supabase_client,
+                db_table=settings.supabase_table,
+                embeddings=openai_embeddings,
+                top_k=2,
+            )
+            print(vs_docs)
+            logger.info(f"Found {len(vs_docs)} documents in vector store.")
+
+        else:
+            logger.fatal("No query text provided, set QUERY_TEXT environment variable")
+            sys.exit(1)
 
     elif settings.action_mode == "ingest":
 
@@ -164,7 +171,9 @@ if __name__ == "__main__":
             documents = ingest_text(settings.ingest_text, metadata)
 
         else:
-            logger.fatal("No content to ingest. Provide either a directory or text.")
+            logger.fatal(
+                "No content to ingest, set INGEST_DIR or INGEST_TEXT environment variables"
+            )
             sys.exit(1)
 
         chunks = chunk_documents(

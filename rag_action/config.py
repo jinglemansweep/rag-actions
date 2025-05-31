@@ -34,6 +34,8 @@ class Config:
     ingest_pattern: str
     ingest_text: str
     ingest_metadata: str
+    query_text: str
+    query_top_k: int
 
 
 settings = Config(
@@ -49,4 +51,6 @@ settings = Config(
     ingest_pattern=os.getenv("INGEST_PATTERN", "*.*"),
     ingest_text=os.getenv("INGEST_TEXT", ""),
     ingest_metadata=os.getenv("INGEST_METADATA", "{}"),
+    query_text=os.getenv("QUERY_TEXT", ""),
+    query_top_k=int(os.getenv("QUERY_TOP_K", "5")),
 )

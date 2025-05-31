@@ -40,6 +40,14 @@ inputs:
     description: "Metadata for the ingestion"
     required: false
     default: "{}"
+  query_text:
+    description: "Text to query"
+    required: false
+    default: ""
+  query_top_k:
+    description: "Number of top results to return for queries"
+    required: false
+    default: "5"
 
 runs:
   using: docker
@@ -56,3 +64,5 @@ runs:
     INGEST_DIR: ${{ inputs.ingest_dir }}
     INGEST_TEXT: ${{ inputs.ingest_text }}
     INGEST_METADATA: ${{ inputs.ingest_metadata }}
+    QUERY_TEXT: ${{ inputs.query_text }}
+    QUERY_TOP_K: ${{ inputs.query_top_k }}
