@@ -48,4 +48,4 @@ runs:
     CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
     INGEST_DIR: ${{ inputs.ingest_dir }}
     INGEST_METADATA: ${{ inputs.ingest_metadata }}
-  entrypoint: ["/venv/bin/python", "-m", "rag_action.ingest.directory"]
+  args: ["-m", "rag_action.ingest.directory"]
