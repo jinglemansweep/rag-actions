@@ -25,3 +25,28 @@ jobs:
           supabase_table: ${{ vars.SUPABASE_TABLE }}
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_skills"
           ingest_dir: "./test/content/skills"
+
+  QueryTemplateSkills:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Query Template
+        id: query_template
+        uses: jinglemansweep/rag-actions/.github/actions/query-template@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_skills"
+          query_text: "DevOps"
+          top_k: "3"
+          template_text: |
+            # DevOps Skills
+            {% for doc in docs %}
+            - {{ doc.page_content }}
+            {% endfor %}
+      - name: Template Output
+        run: |
+          echo "${{ steps.query_template.outputs.text }}"
