@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Directory Ingestion
-        uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
+        uses: jinglemansweep/rag-actions/.github/actions/ingest/directory@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Text Ingestion
-        uses: jinglemansweep/rag-actions/.github/actions/ingest-text@main
+        uses: jinglemansweep/rag-actions/.github/actions/ingest/text@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
