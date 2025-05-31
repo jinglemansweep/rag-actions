@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "rag_action"
+version = "0.1.0"
+description = "RAG GitHub Actions"
+authors = ["Louis King <jinglemansweep@gmail.com>"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^1.82.1"
+langchain = "^0.3.25"
+supabase = "^2.15.2"
+pymupdf = "^1.26.0"
+requests = "^2.32.3"
+langchain-community = "^0.3.24"
+tiktoken = "^0.9.0"
+langchain-openai = "^0.3.18"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

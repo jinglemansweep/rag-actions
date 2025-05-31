@@ -1,0 +1,17 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Langchain RAG Indexer
+        uses: jinglemansweep/rag-actions/.github/actions/rag-indexer@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          embedding_model: "text-embedding-ada-002"
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          text_dir: "./docs"
+          # or
+          # url: "https://example.com"
