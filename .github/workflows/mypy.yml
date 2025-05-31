@@ -27,4 +27,4 @@ jobs:
       - name: MyPy check
         run: |
           . ./venv/bin/activate
-          mypy wideboy/**/*.py
+          mypy rag_action/**/*.py

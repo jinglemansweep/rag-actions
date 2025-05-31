@@ -27,4 +27,4 @@ jobs:
       - name: black check
         run: |
           . ./venv/bin/activate
-          black wideboy/
+          black rag_action/

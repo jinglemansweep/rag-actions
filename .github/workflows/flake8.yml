@@ -27,4 +27,4 @@ jobs:
       - name: flake8 check
         run: |
           . ./venv/bin/activate
-          flake8 wideboy/
+          flake8 rag_action/
