@@ -27,4 +27,4 @@ if __name__ == "__main__":
     response = model_chat(prompt_text_input, chat_model)
 
     logger.info(f"Chat Response: {response.content}")
-    set_action_ouput("text", response.content)
+    set_action_ouput("text", response.content, output_json=True)
