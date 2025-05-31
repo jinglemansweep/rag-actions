@@ -10,20 +10,38 @@ A collection of GitHub Actions that provide typical [Langchain](https://www.lang
 
 Create a Supabase account and database and create required vector tables and functions using the provided [example SQL file](./supabase/setup.sql).
 
-## Indexer Action
+All workflows require the same base configuration, consisting of an OpenAI API Key, Supabase URL and API Key which should be created as GitHub secrets so they can be reused across multiple workflows.
 
-This action can currently index text files and other unstructured documents, usually located in a directory within a Git repository. An OpenAI API key is required as well as a Supabase URL and API key which should be created as GitHub secrets for use in the workflows.
+## Ingest: Directory
+
+This action can currently index text files and other unstructured documents, usually located in a directory within a Git repository.
 
 Example Usage:
 
-    - name: Run RAG Indexer Action
-      uses: jinglemansweep/rag-actions/.github/actions/rag-indexer@main
+    - name: Ingest Directory
+      uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
       with:
         openai_api_key: ${{ secrets.OPENAI_API_KEY }}
         supabase_url: ${{ secrets.SUPABASE_URL }}
         supabase_key: ${{ secrets.SUPABASE_KEY }}
-        supabase_table: "rag_chunks"
-        embedding_model: "text-embedding-ada-002"
-        chunk_size: "500"
-        chunk_overlap: "50"
-        docs_dir: "./docs"
+        supabase_table: "documents"
+        ingest_dir: "./test/content"
+        ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
+
+## Ingest: Text
+
+This action can currently index simple text fragments.
+
+Example Usage:
+
+    - name: Ingest Text
+      uses: jinglemansweep/rag-actions/.github/actions/ingest-text@main
+      with:
+        openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+        supabase_url: ${{ secrets.SUPABASE_URL }}
+        supabase_key: ${{ secrets.SUPABASE_KEY }}
+        supabase_table: "documents"
+        ingest_text: |
+          Hello, this is some example text, generated dynamically
+          by a GitHub Action Run ${{ github.run_id }}
+        ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
