@@ -29,8 +29,6 @@ jobs:
           ingest_metadata: '{"category": "devops"}'
       - name: Produce RAG Prompt
         id: rag_prompt
-        needs:
-          - ingest_skills
         uses: jinglemansweep/rag-actions/.github/actions/query-template@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -48,8 +46,6 @@ jobs:
             {% endfor %}
       - name: Chat
         id: chat
-        needs:
-          - rag_prompt
         uses: jinglemansweep/rag-actions/.github/actions/infer-chat@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
