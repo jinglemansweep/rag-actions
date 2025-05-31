@@ -151,7 +151,8 @@ if __name__ == "__main__":
             metadata = (
                 json.loads(settings.ingest_metadata) if settings.ingest_metadata else {}
             )
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
+            logger.warning(f"Invalid JSON in ingest_metadata: {e}")
             metadata = {}
         logger.info(f"Metadata for ingestion: {metadata}")
 
