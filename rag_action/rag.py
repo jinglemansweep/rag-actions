@@ -66,7 +66,6 @@ def parse_metadata(metadata_str: str) -> Dict:
     """
     try:
         metadata = json.loads(metadata_str)
-        logger.info(f"Metadata: {metadata}")
         return metadata
     except json.JSONDecodeError as e:
         logger.warning(f"Invalid JSON in metadata: {e}")
