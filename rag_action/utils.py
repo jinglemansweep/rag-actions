@@ -55,6 +55,6 @@ def set_action_ouput(name: str, value: str) -> None:
     """
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
-            print(f"{name}<<EOF\n{value}\nEOF", file=fh)
+            print(f"{name}=<<EOF\n{value}\nEOF", file=fh)
     except Exception as e:
         logging.warning(f"Failed to set GitHub Actions output: {e}")
