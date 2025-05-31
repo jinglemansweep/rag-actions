@@ -25,11 +25,11 @@ inputs:
   chunk_size:
     description: "Chunk size for text splitting"
     required: false
-    default: "500"
+    default: "2000"
   chunk_overlap:
     description: "Chunk overlap for text splitting"
     required: false
-    default: "50"
+    default: "200"
   ingest_text:
     description: "Text to ingest"
     required: true
