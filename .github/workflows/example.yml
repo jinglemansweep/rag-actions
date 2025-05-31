@@ -43,10 +43,13 @@ jobs:
           query_text: "DevOps"
           top_k: "3"
           template_text: |
-            # DevOps Skills
+            You are a helpful assistant that provides information about a candidate's skills. The candidate has the following skills:
+
+            <skills>
             {% for doc in docs %}
-            - {{ doc.page_content }}
+              <skill>{{ doc.page_content }}</skill>
             {% endfor %}
+            </skills>
       - name: Template Output
         run: |
           echo "${{ steps.query_template.outputs.text }}"
