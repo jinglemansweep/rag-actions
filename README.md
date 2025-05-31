@@ -2,6 +2,8 @@
 
 [![.github/workflows/test.yml](https://github.com/jinglemansweep/rag-actions/actions/workflows/test.yml/badge.svg)](https://github.com/jinglemansweep/rag-actions/actions/workflows/test.yml)
 
+![Logo](./docs/images/logo.png)
+
 A collection of GitHub Actions that provide typical Langchain RAG workflows such as content indexing, chunking and embedding. The resulting embeddings are then stored in [Supabase](https://supabase.com/) tables.
 
 ## Indexer Action
