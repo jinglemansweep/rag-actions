@@ -53,7 +53,7 @@ jobs:
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}"
-          query_text: ${{ steps.rag_prompt.outputs.text }}
+          prompt_text: ${{ steps.rag_prompt.outputs.text }}
       - name: Chat Output
         run: |
           echo "${{ steps.chat.outputs.text }}"

@@ -30,13 +30,9 @@ inputs:
     description: "LLM chat model name"
     required: false
     default: "gpt-3.5-turbo"
-  query_text:
+  prompt_text:
     description: "Query text to search in the RAG system"
     required: true
-  context_text:
-    description: "Context text to use in the query"
-    required: false
-    default: ""
 
 runs:
   using: docker
@@ -49,5 +45,5 @@ runs:
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
     SUPABASE_COLLECTION: ${{ inputs.supabase_collection }}
     CHAT_MODEL: ${{ inputs.chat_model }}
-    QUERY_TEXT: ${{ inputs.query_text }}
+    PROMPT_TEXT: ${{ inputs.prompt_text }}
   args: ["-m", "rag_action.infer.chat"]
