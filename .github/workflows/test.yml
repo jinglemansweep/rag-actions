@@ -21,6 +21,6 @@ jobs:
           embedding_model: "text-embedding-ada-002"
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
-          text_dir: "./docs"
+          docs_dir: "./docs"
           # or
           # url: "https://example.com"
