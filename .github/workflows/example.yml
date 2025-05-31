@@ -47,7 +47,9 @@ jobs:
 
             <skills>
             {% for doc in docs %}
-              <skill>{{ doc.page_content }}</skill>
+              <skill>
+                {{ doc.page_content }}
+              </skill>
             {% endfor %}
             </skills>
       - name: Template Output
