@@ -68,6 +68,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Query Search
+        id: query_template
         uses: jinglemansweep/rag-actions/.github/actions/query-template@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
