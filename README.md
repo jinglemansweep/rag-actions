@@ -4,7 +4,7 @@
 
 ![Logo](./docs/images/logo.png)
 
-A collection of GitHub Actions that provide typical Langchain RAG workflows such as content indexing, chunking and embedding. The resulting embeddings are then stored in [Supabase](https://supabase.com/) tables.
+A collection of GitHub Actions that provide typical [Langchain](https://www.langchain.com/) RAG workflows such as content indexing, chunking and embedding. The resulting embeddings are then stored in [Supabase](https://supabase.com/) tables.
 
 ## Indexer Action
 
