@@ -28,11 +28,11 @@ inputs:
     description: "Chunk overlap for text splitting"
     required: false
     default: "50"
-  docs_dir:
-    description: "Directory containing documents"
+  content_dir:
+    description: "Directory containing content"
     required: false
     default: ""
-  url:
+  content_url:
     description: "URL to crawl"
     required: false
     default: ""
@@ -41,6 +41,7 @@ runs:
   using: docker
   image: ../../../Dockerfile
   env:
+    ACTION_MODE: "ingest"
     OPENAI_API_KEY: ${{ inputs.openai_api_key }}
     EMBEDDING_MODEL: ${{ inputs.embedding_model }}
     SUPABASE_URL: ${{ inputs.supabase_url }}
@@ -48,5 +49,4 @@ runs:
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
     CHUNK_SIZE: ${{ inputs.chunk_size }}
     CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
-    DOCS_DIR: ${{ inputs.docs_dir }}
-    URL: ${{ inputs.url }}
+    CONTENT_DIR: ${{ inputs.content_dir }}
