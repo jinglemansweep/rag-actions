@@ -2585,6 +2585,21 @@ files = [
 ]
 
 [[package]]
+name = "types-requests"
+version = "2.32.0.20250515"
+description = "Typing stubs for requests"
+category = "main"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "types_requests-2.32.0.20250515-py3-none-any.whl", hash = "sha256:f8eba93b3a892beee32643ff836993f15a785816acca21ea0ffa006f05ef0fb2"},
+    {file = "types_requests-2.32.0.20250515.tar.gz", hash = "sha256:09c8b63c11318cb2460813871aaa48b671002e59fda67ca909e9883777787581"},
+]
+
+[package.dependencies]
+urllib3 = ">=2"
+
+[[package]]
 name = "types-toml"
 version = "0.10.8.20240310"
 description = "Typing stubs for toml"
@@ -2992,4 +3007,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7c00c826bca586099c7d1a0fa57489344c47da24f43a6cbe701a3ab0de72ef4b"
+content-hash = "69d0d9e1708112ed358c30024474112d29634903a30dd32a014a028332e45ce5"

@@ -21,4 +21,3 @@ Example Usage:
         chunk_size: "500"
         chunk_overlap: "50"
         docs_dir: "./docs"
-
