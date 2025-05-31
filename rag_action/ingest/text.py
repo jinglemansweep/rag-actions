@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     logger.info(
         introduce(
-            "Ingest Text",
+            "Vector Store Ingest - Text",
             base_config,
             {
                 "chunk_size": chunk_size,

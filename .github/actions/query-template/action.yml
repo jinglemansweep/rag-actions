@@ -1,0 +1,49 @@
+name: "RAG Query Template"
+description: "Render Jinja templates using results from RAG query"
+author: "JingleManSweep"
+
+inputs:
+  openai_api_key:
+    description: "OpenAI API Key"
+    required: true
+  embedding_model:
+    description: "OpenAI Embedding model name"
+    required: false
+    default: "text-embedding-ada-002"
+  supabase_url:
+    description: "Supabase instance URL"
+    required: true
+  supabase_key:
+    description: "Supabase service role key"
+    required: true
+  supabase_table:
+    description: "Supabase table name"
+    required: true
+  supabase_collection:
+    description: "Supabase collection name"
+    required: true
+  query_text:
+    description: "Text to query against the RAG system"
+    required: true
+  top_k:
+    description: "Number of top results to return"
+    required: false
+    default: "5"
+  template_text:
+    description: "Jinja template text to render with query results"
+    required: true
+
+runs:
+  using: docker
+  image: ../../../Dockerfile
+  env:
+    OPENAI_API_KEY: ${{ inputs.openai_api_key }}
+    EMBEDDING_MODEL: ${{ inputs.embedding_model }}
+    SUPABASE_URL: ${{ inputs.supabase_url }}
+    SUPABASE_KEY: ${{ inputs.supabase_key }}
+    SUPABASE_TABLE: ${{ inputs.supabase_table }}
+    SUPABASE_COLLECTION: ${{ inputs.supabase_collection }}
+    QUERY_TEXT: ${{ inputs.query_text }}
+    TOP_K: ${{ inputs.top_k }}
+    TEMPLATE_TEXT: ${{ inputs.template_text }}
+  args: ["-m", "rag_action.query.template"]

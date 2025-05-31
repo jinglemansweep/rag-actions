@@ -16,12 +16,17 @@ if __name__ == "__main__":
 
     query_text_input = get_env_var("QUERY_TEXT")
     top_k = get_env_var("TOP_K", "5", int)
+    template_text_input = get_env_var("TEMPLATE_TEXT")
 
     logger.info(
         introduce(
-            "Vector Store Query",
+            "Vector Store Template",
             base_config,
-            {"query_text": query_text_input, "top_k": top_k},
+            {
+                "query_text": query_text_input,
+                "top_k": top_k,
+                "template_text": template_text_input,
+            },
         )
     )
 
