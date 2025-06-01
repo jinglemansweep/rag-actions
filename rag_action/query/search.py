@@ -1,7 +1,7 @@
 import logging
 from ..constants import StateMessage
 from ..config import get_env_var
-from ..rag import get_openai_embeddings, supabase_query, docs_json
+from ..rag import get_openai_embeddings, supabase_query
 from ..supabase import create_client as create_supabase_client
 from ..utils import setup_logger, introduce, get_action_input, set_action_output
 
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     set_action_output(
         StateMessage(
-            docs=docs_json(documents),
+            docs=documents,
             inputs={
                 "query_text": query_text_input,
                 "top_k": top_k,
