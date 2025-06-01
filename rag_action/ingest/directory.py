@@ -1,5 +1,4 @@
 import logging
-from ..constants import StateMessage
 from ..rag import (
     chunk_documents,
     parse_metadata,
@@ -9,7 +8,6 @@ from ..rag import (
     ingest_directory,
 )
 from ..config import get_env_var
-from ..github import get_action_input, set_action_output
 from ..supabase import create_client as create_supabase_client
 from ..utils import setup_logger
 
@@ -33,8 +31,6 @@ if __name__ == "__main__":
 
     metadata = parse_metadata(ingest_metadata, supabase_collection)
 
-    input_state = get_action_input()
-
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key
     )
@@ -57,15 +53,6 @@ if __name__ == "__main__":
         db_table=supabase_table,
     )
 
-    set_action_output(
-        StateMessage(
-            docs=chunks,
-            inputs={
-                "ingest_dir": ingest_dir_input,
-                "ingest_glob_pattern": ingest_glob_pattern,
-                "chunk_size": chunk_size,
-                "chunk_overlap": chunk_overlap,
-                "embedding_model": embedding_model,
-            },
-        )
+    logger.info(
+        f"Successfully ingested {len(documents)} documents and {len(chunks)} chunks."
     )

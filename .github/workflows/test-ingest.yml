@@ -30,22 +30,3 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_test"
           ingest_dir: "./test/content/test"
           ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
-
-  IngestText:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Text Ingestion
-        uses: jinglemansweep/rag-actions/.github/actions/ingest-text@main
-        with:
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          supabase_url: ${{ secrets.SUPABASE_URL }}
-          supabase_key: ${{ secrets.SUPABASE_KEY }}
-          supabase_table: ${{ vars.SUPABASE_TABLE }}
-          supabase_collection: ${{ vars.SUPABASE_COLLECTION }}
-          ingest_text: |
-            This is a test text to be ingested into the RAG system.
-            It will be chunked and stored in the Supabase database.
-            GitHub Run ID: ${{ github.run_id }}
-          ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
