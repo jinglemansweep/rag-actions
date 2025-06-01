@@ -60,6 +60,6 @@ runs:
     ARGS: ${{ inputs.args }}
     LOADER_CLASS: ${{ inputs.loader_class }}
     LOADER_ARGS: ${{ inputs.loader_args }}
-    CHUNKER_CLASS: ${{ inputs.chunk_class }}
+    CHUNKER_CLASS: ${{ inputs.chunker_class }}
     CHUNKER_ARGS: ${{ inputs.chunker_args }}
   args: ["-m", "rag_action.ingest.loader"]
