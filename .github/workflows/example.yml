@@ -30,9 +30,9 @@ jobs:
           ingest_dir: "./test/content/skills/devops"
           ingest_metadata: '{"category": "devops"}'
 
-      - name: Produce RAG Prompt
-        id: rag_prompt
-        uses: jinglemansweep/rag-actions/.github/actions/query-template@main
+      - name: Produce RAG Context
+        id: rag_context
+        uses: jinglemansweep/rag-actions/.github/actions/query-search@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
@@ -41,14 +41,6 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           query_text: "devops"
           top_k: "3"
-          template_text: |
-            <context>
-              {% for doc in docs %}
-                <item>
-                {{ doc.page_content }}
-                </item>
-              {% endfor %}
-            </context>
 
       - name: Chat
         id: chat
@@ -61,7 +53,7 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           prompt_text: |
             ${{ vars.PROMPT_RAG }}
-            ${{ steps.rag_prompt.outputs.json }}
+            ${{ steps.rag_context.outputs.json }}
 
       - name: Chat Output
         run: |
