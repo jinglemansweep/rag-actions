@@ -1,5 +1,4 @@
 import logging
-import os
 from ..config import get_env_var
 from ..rag import get_openai_embeddings, supabase_query, docs_json
 from ..supabase import create_client as create_supabase_client
@@ -10,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
-    print(os.environ.items())
+
     openai_api_key = get_env_var("OPENAI_API_KEY")
     supabase_url = get_env_var("SUPABASE_URL")
     supabase_key = get_env_var("SUPABASE_KEY")

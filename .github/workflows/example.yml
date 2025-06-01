@@ -38,13 +38,12 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - IngestSkills
+    outputs:
+      json: ${{ steps.main.outputs.json }}
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Query Search
-        id: rag_context
+        id: main
         uses: jinglemansweep/rag-actions/.github/actions/query-search@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -59,13 +58,12 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - QuerySearchDevOps
+    outputs:
+      json: ${{ steps.main.outputs.json }}
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Infer Chat
-        id: chat
+        id: main
         uses: jinglemansweep/rag-actions/.github/actions/infer-chat@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -75,7 +73,7 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           prompt_text: |
             ${{ vars.PROMPT_RAG }}
-            ${{ steps.rag_context.outputs.json }}
+            ${{ jobs.QuerySearchDevOps.outputs.json }}
 
   ChatOutput:
     runs-on: ubuntu-latest
@@ -84,20 +82,19 @@ jobs:
     steps:
 
       - name: Output
+        id: main
         run: |
-          echo '${{ steps.chat.outputs.json }}'
+          echo '${{ job.InferChat.outputs.json }}'
+
 
   QueryTest1:
     runs-on: ubuntu-latest
     outputs:
-      json: ${{ steps.query_test.outputs.json }}
+      json: ${{ steps.main.outputs.json }}
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Query Test
-        id: query_test
+        id: main
         uses: jinglemansweep/rag-actions/.github/actions/query-test@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
@@ -111,13 +108,12 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - QueryTest1
+    outputs:
+      json: ${{ steps.main.outputs.json }}
     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Query Test
-        id: query_test
+        id: main
         uses: jinglemansweep/rag-actions/.github/actions/query-test@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
