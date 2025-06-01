@@ -41,6 +41,7 @@ jobs:
           args: |
             {
               "path": "./test/content/test",
+              "glob": "**/*.md"
             }
           loader_class: "markdown"
           loader_args: '{}'

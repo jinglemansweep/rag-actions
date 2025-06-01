@@ -25,20 +25,21 @@ if __name__ == "__main__":
     supabase_key = get_env_var("SUPABASE_KEY")
     supabase_table = get_env_var("SUPABASE_TABLE")
     embedding_model = get_env_var("EMBEDDING_MODEL")
-    options_str = get_env_var("OPTIONS", "{}")
-    options = parse_json(options_str)
+    metadata = get_env_var("METADATA", "{}")
+    metadata = parse_json(metadata)
+    args_str = get_env_var("ARGS", "{}")
+    args = parse_json(args_str)
     loader_class = get_env_var("LOADER_CLASS")
-    loader_options_str = get_env_var("LOADER_OPTIONS", "{}")
-    loader_options = parse_json(loader_options_str)
+    loader_args_str = get_env_var("LOADER_ARGS", "{}")
+    loader_args = parse_json(loader_args_str)
     chunker_class = get_env_var("CHUNKER_CLASS")
-    chunker_options_str = get_env_var("CHUNKER_OPTIONS", "{}")
-    chunker_options = parse_json(chunker_options_str)
-
+    chunker_args_str = get_env_var("CHUNKER_ARGS", "{}")
+    chunker_args = parse_json(chunker_args_str)
     logger.info(f"OPENAI: model={embedding_model}")
     logger.info(f"SUPABASE: url={supabase_url} table={supabase_table}")
-    logger.info(f"ACTION: options={options}")
-    logger.info(f"LOADER: options={loader_options}")
-    logger.info(f"CHUNKER: options={chunker_options}")
+    logger.info(f"ACTION: args={args}")
+    logger.info(f"LOADER: args={loader_args}")
+    logger.info(f"CHUNKER: args={chunker_args}")
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key
@@ -56,17 +57,12 @@ if __name__ == "__main__":
         loader_cls = MarkdownFrontmatterLoader
 
     if use_directory_loader:
-        loader = DirectoryLoader(
-            options.get("directory"),
-            glob=loader_options["glob_pattern"],
-            loader_cls=loader_cls,
-            loader_kwargs=loader_options["kwargs"],
-        )
+        loader = DirectoryLoader(loader_cls=loader_cls, loader_kwargs=args)
     else:
-        loader = loader_cls(urls=[loader_options["url"]])
+        loader = loader_cls(**loader_args)
 
     docs = loader.load()
-    docs = apply_metadata(docs, loader_options["metadata"])
+    docs = apply_metadata(docs, metadata)
 
     if chunker_class == "SOMETHING_ELSE":
         raise NotImplementedError(
@@ -75,7 +71,7 @@ if __name__ == "__main__":
     else:
         chunker_class = RecursiveCharacterTextSplitter
 
-    chunker_inst = chunker_class(**chunker_options)
+    chunker_inst = chunker_class(**chunker_args)
     chunks = chunk_documents(docs, chunker_inst)
     doc_embeddings = build_document_embeddings(chunks, openai_embeddings)
 
