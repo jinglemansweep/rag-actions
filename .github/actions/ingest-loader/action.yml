@@ -51,9 +51,8 @@ runs:
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
-    CHUNK_SIZE: ${{ inputs.chunk_size }}
-    CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
-    DIRECTORY: ${{ inputs.directory }}
-    GLOB_PATTERN: ${{ inputs.glob_pattern }}
-    METADATA: ${{ inputs.metadata }}
+    LOADER_CLASS: ${{ inputs.loader_class }}
+    LOADER_OPTIONS: ${{ inputs.loader_options }}
+    CHUNK_CLASS: ${{ inputs.chunk_class }}
+    CHUNKER_OPTIONS: ${{ inputs.chunker_options }}
   args: ["-m", "rag_action.ingest.loader"]
