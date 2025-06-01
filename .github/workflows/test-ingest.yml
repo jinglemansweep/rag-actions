@@ -31,22 +31,18 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
-          options: |
+          metadata: |
             {
-              "directory": "./test/content/test",
-              "metadata": {
-                "collection": "${{ vars.SUPABASE_COLLECTION }}",
-                "github": {
-                  "run": "${{ github.run_id }}"
-                }
+              "collection": "${{ vars.SUPABASE_COLLECTION }}",
+              "github": {
+                "run": "${{ github.run_id }}"
               }
             }
-          loader_class: "markdown"
-          loader_options: |
+          args: |
             {
-              "directory": "./test/content/test",
-
+              "path": "./test/content/test",
             }
-          chunk_class: "recursive_character"
-          chunker_options: '{"chunk_size": 1000, "chunk_overlap": 200}'
-          metadata: '{"collection": "${{ vars.SUPABASE_COLLECTION }}", "github": {"run": "${{ github.run_id }}"}}'
+          loader_class: "markdown"
+          loader_args: '{}'
+          chunker_class: "recursive_character"
+          chunker_args: '{"chunk_size": 1000, "chunk_overlap": 200}'

@@ -19,30 +19,31 @@ inputs:
   supabase_table:
     description: "Supabase table name"
     required: true
-  options:
-    description: "General options"
-    required: false
-    default: '{}'
-  loader_class:
-    description: "Loader class for reading files"
-    required: false
-    default: "markdown"
-  loader_options:
-    description: "Options for the loader class"
-    required: false
-    default: "{}"
-  chunker_class:
-    description: "Chunk class for text splitting"
-    required: false
-    default: "recursive_character"
-  chunker_options:
-    description: "Options for the chunker class"
-    required: false
-    default: '{"chunk_size": 1000, "chunk_overlap": 200}'
   metadata:
     description: "Metadata for the ingestion"
     required: false
     default: "{}"
+  args:
+    description: "General arguments"
+    required: false
+    default: '{}'
+  loader_class:
+    description: "Loader class"
+    required: false
+    default: "markdown"
+  loader_args:
+    description: "Loader arguments"
+    required: false
+    default: "{}"
+  chunker_class:
+    description: "Chunker class"
+    required: false
+    default: "recursive_character"
+  chunker_args:
+    description: "Chunker arguments"
+    required: false
+    default: '{"chunk_size": 1000, "chunk_overlap": 200}'
+
 
 runs:
   using: docker
