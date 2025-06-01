@@ -1,9 +1,10 @@
 import logging
 from ..constants import StateMessage
 from ..config import get_env_var
+from ..github import get_action_input, set_action_output
 from ..rag import get_openai_embeddings, supabase_query
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce, get_action_input, set_action_output
+from ..utils import setup_logger
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -22,22 +23,6 @@ if __name__ == "__main__":
     top_k = get_env_var("TOP_K", "5", int)
 
     input_state = get_action_input()
-
-    logger.info(
-        introduce(
-            "Vector Store Query",
-            {
-                "openai_api_key": openai_api_key,
-                "supabase_url": supabase_url,
-                "supabase_key": supabase_key,
-                "supabase_table": supabase_table,
-                "supabase_collection": supabase_collection,
-                "embedding_model": "text-embedding-ada-002",
-                "query_text": query_text_input,
-                "top_k": top_k,
-            },
-        )
-    )
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key

@@ -1,7 +1,8 @@
 import logging
 from langchain_core.documents import Document
 from ..constants import StateMessage
-from ..utils import setup_logger, introduce, get_action_input, set_action_output
+from ..github import get_action_input, set_action_output
+from ..utils import setup_logger
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -20,15 +21,6 @@ DOCS = [
 if __name__ == "__main__":
 
     input_state = get_action_input()
-
-    logger.info(
-        introduce(
-            "Test",
-            {
-                "input_state": input_state,
-            },
-        )
-    )
 
     set_action_output(
         StateMessage(

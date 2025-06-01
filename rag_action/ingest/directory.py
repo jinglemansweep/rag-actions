@@ -9,8 +9,9 @@ from ..rag import (
     ingest_directory,
 )
 from ..config import get_env_var
+from ..github import get_action_input, set_action_output
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce, get_action_input, set_action_output
+from ..utils import setup_logger
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -33,26 +34,6 @@ if __name__ == "__main__":
     metadata = parse_metadata(ingest_metadata, supabase_collection)
 
     input_state = get_action_input()
-
-    logger.info(
-        introduce(
-            "Vector Store Ingest - Directory",
-            {
-                "openai_api_key": openai_api_key,
-                "supabase_url": supabase_url,
-                "supabase_key": supabase_key,
-                "supabase_table": supabase_table,
-                "supabase_collection": supabase_collection,
-                "embedding_model": embedding_model,
-                "chunk_size": chunk_size,
-                "chunk_overlap": chunk_overlap,
-                "ingest_dir": ingest_dir_input,
-                "ingest_glob_pattern": ingest_glob_pattern,
-                "ingest_metadata": ingest_metadata,
-            },
-            metadata,
-        )
-    )
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key

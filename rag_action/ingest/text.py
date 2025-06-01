@@ -1,6 +1,7 @@
 import logging
 from ..constants import StateMessage
 from ..config import get_env_var
+from ..github import get_action_input, set_action_output
 from ..rag import (
     chunk_documents,
     parse_metadata,
@@ -10,7 +11,7 @@ from ..rag import (
     ingest_text,
 )
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce, get_action_input, set_action_output
+from ..utils import setup_logger
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -32,25 +33,6 @@ if __name__ == "__main__":
     metadata = parse_metadata(ingest_metadata, supabase_collection)
 
     input_state = get_action_input()
-
-    logger.info(
-        introduce(
-            "Vector Store Ingest - Text",
-            {
-                "openai_api_key": openai_api_key,
-                "supabase_url": supabase_url,
-                "supabase_key": supabase_key,
-                "supabase_table": supabase_table,
-                "supabase_collection": supabase_collection,
-                "embedding_model": embedding_model,
-                "chunk_size": chunk_size,
-                "chunk_overlap": chunk_overlap,
-                "ingest_text_input": ingest_text_input,
-                "ingest_metadata": ingest_metadata,
-            },
-            metadata,
-        )
-    )
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key
