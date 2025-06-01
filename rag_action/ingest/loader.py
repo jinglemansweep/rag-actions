@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 from langchain_community.document_loaders import DirectoryLoader, RSSFeedLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from ..config import get_env_var
@@ -18,9 +17,6 @@ from ..utils import parse_json
 setup_logger()
 logger = logging.getLogger(__name__)
 
-DEFAULT_LOADER_CLASS = "markdown"
-DEFAULT_LOADER_OPTIONS = {"glob_pattern": "**/*.md", "kwargs": {}, "metadata": {}}
-
 
 if __name__ == "__main__":
 
@@ -29,15 +25,18 @@ if __name__ == "__main__":
     supabase_key = get_env_var("SUPABASE_KEY")
     supabase_table = get_env_var("SUPABASE_TABLE")
     embedding_model = get_env_var("EMBEDDING_MODEL")
-    loader_class = get_env_var("LOADER_CLASS", default=DEFAULT_LOADER_CLASS)
+    options_str = get_env_var("OPTIONS", "{}")
+    options = parse_json(options_str)
+    loader_class = get_env_var("LOADER_CLASS")
     loader_options_str = get_env_var("LOADER_OPTIONS", "{}")
-    loader_options = DEFAULT_LOADER_OPTIONS | parse_json(loader_options_str)
+    loader_options = parse_json(loader_options_str)
     chunker_class = get_env_var("CHUNKER_CLASS")
     chunker_options_str = get_env_var("CHUNKER_OPTIONS", "{}")
     chunker_options = parse_json(chunker_options_str)
 
     logger.info(f"OPENAI: model={embedding_model}")
     logger.info(f"SUPABASE: url={supabase_url} table={supabase_table}")
+    logger.info(f"ACTION: options={options}")
     logger.info(f"LOADER: options={loader_options}")
     logger.info(f"CHUNKER: options={chunker_options}")
 
@@ -53,12 +52,12 @@ if __name__ == "__main__":
         raise NotImplementedError(f"Loader class '{loader_class}' is not implemented.")
     elif loader_class == "rss":
         loader_cls = RSSFeedLoader
-    else:
+    else:  # loader_class == "markdown"
         loader_cls = MarkdownFrontmatterLoader
 
     if use_directory_loader:
         loader = DirectoryLoader(
-            Path(loader_options["directory"]),
+            options.get("directory"),
             glob=loader_options["glob_pattern"],
             loader_cls=loader_cls,
             loader_kwargs=loader_options["kwargs"],

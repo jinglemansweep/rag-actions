@@ -31,8 +31,7 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
-          loader_class: "markdown"
-          loader_options: |
+          options: |
             {
               "directory": "./test/content/test",
               "metadata": {
@@ -41,6 +40,12 @@ jobs:
                   "run": "${{ github.run_id }}"
                 }
               }
+            }
+          loader_class: "markdown"
+          loader_options: |
+            {
+              "directory": "./test/content/test",
+
             }
           chunk_class: "recursive_character"
           chunker_options: '{"chunk_size": 1000, "chunk_overlap": 200}'

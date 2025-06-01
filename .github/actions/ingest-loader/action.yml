@@ -19,6 +19,10 @@ inputs:
   supabase_table:
     description: "Supabase table name"
     required: true
+  options:
+    description: "General options"
+    required: false
+    default: '{}'
   loader_class:
     description: "Loader class for reading files"
     required: false
@@ -51,8 +55,9 @@ runs:
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
+    OPTIONS: ${{ inputs.options }}
     LOADER_CLASS: ${{ inputs.loader_class }}
     LOADER_OPTIONS: ${{ inputs.loader_options }}
-    CHUNK_CLASS: ${{ inputs.chunk_class }}
+    CHUNKER_CLASS: ${{ inputs.chunk_class }}
     CHUNKER_OPTIONS: ${{ inputs.chunker_options }}
   args: ["-m", "rag_action.ingest.loader"]
