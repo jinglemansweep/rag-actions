@@ -25,4 +25,6 @@ if __name__ == "__main__":
     )
 
     response = model_chat(prompt_text_input, chat_model)
+
+    logger.info(f"Output:\n\n{response.content}")
     set_action_output({"text": response.content})

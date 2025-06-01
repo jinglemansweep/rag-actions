@@ -23,4 +23,5 @@ if __name__ == "__main__":
 
     rendered = Template(template_text_input).render(query="testquery", json=[])
 
+    logger.info(f"Output:\n\n{rendered}")
     set_action_output({"text": rendered})
