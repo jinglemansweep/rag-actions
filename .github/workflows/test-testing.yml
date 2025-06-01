@@ -28,4 +28,4 @@ jobs:
         id: main
         uses: jinglemansweep/rag-actions/.github/actions/testing-loader@main
         with:
-          state_json: '{"inputs": {"directory": ""}'
+          state_json: '{"inputs": {"directory": "./test/content/skills"}}'
