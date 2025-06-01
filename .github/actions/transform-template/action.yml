@@ -12,7 +12,7 @@ inputs:
 
 runs:
   using: docker
-  image: docker://ghcr.io/jinglemansweep/rag-actions:latest
+  image: docker://ghcr.io/jinglemansweep/rag-actions:main
   env:
     TEMPLATE_TEXT: ${{ inputs.template_text }}
   args: ["-m", "rag_action.transform.template"]
