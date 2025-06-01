@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=python:3.11-slim
-ARG WORKDIR=/github/workspace
+ARG WORKDIR=/app
 
 FROM ${BASE_IMAGE}
 
