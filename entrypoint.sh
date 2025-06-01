@@ -1,5 +1,5 @@
 #!/bin/sh
 
-source /venv/bin/activate
+. /venv/bin/activate
 cd /app
 exec /venv/bin/python $@

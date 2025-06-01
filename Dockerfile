@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=python:3.11-alpine
+ARG BASE_IMAGE=python:3.11-slim
 
 FROM ${BASE_IMAGE}
 LABEL org.opencontainers.image.source=https://github.com/jinglemansweep/rag-actions
