@@ -9,10 +9,8 @@ from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import TextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain.document_loaders.base import BaseLoader
-from langchain_community.document_loaders import DirectoryLoader
-from pathlib import Path
 from supabase import Client  # type: ignore
-from typing import Dict, List
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +45,17 @@ def model_chat(prompt: str, chat_model: str) -> BaseMessage:
     llm = init_chat_model(model=chat_model)
     response = llm.invoke(prompt)
     return response
+
+
+def apply_metadata(docs: List[Document], metadata: dict) -> List[Document]:
+    """
+    Apply metadata to a list of Document objects.
+    """
+    for doc in docs:
+        new_metadata = metadata.copy()
+        new_metadata.update(doc.metadata or {})
+        doc.metadata = new_metadata
+    return docs
 
 
 def chunk_documents(
@@ -155,21 +164,3 @@ def supabase_write(
             )
             .execute()
         )
-
-
-def ingest_directory(directory: str, metadata: Dict, pattern="*.md") -> List[Document]:
-    """
-    Ingest documents from a directory, loading files matching the pattern.
-    """
-    loader = DirectoryLoader(
-        Path(directory),
-        glob=pattern,
-        loader_cls=MarkdownFrontmatterLoader,
-        loader_kwargs={},
-    )
-    docs = loader.load()
-    for doc in docs:
-        doc_metadata = metadata.copy()
-        doc_metadata.update(doc.metadata or {})
-        doc.metadata = doc_metadata
-    return docs

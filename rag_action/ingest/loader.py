@@ -1,13 +1,16 @@
 import logging
+from pathlib import Path
+from langchain_community.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from ..config import get_env_var
 from ..logger import setup_logger
 from ..rag import (
     chunk_documents,
+    apply_metadata,
     get_openai_embeddings,
     build_document_embeddings,
     supabase_write,
-    ingest_directory,
+    MarkdownFrontmatterLoader,
 )
 from ..supabase import create_client as create_supabase_client
 from ..utils import parse_json
@@ -16,10 +19,14 @@ setup_logger()
 logger = logging.getLogger(__name__)
 
 DEFAULT_LOADER_CLASS = "markdown"
-DEFAULT_LOADER_OPTIONS = {"glob_pattern": "**/*.md", "metadata": {}}
+DEFAULT_LOADER_OPTIONS = {"glob_pattern": "**/*.md", "kwargs": {}, "metadata": {}}
 
 DEFAULT_CHUNKER_CLASS = "recursive_character"
-DEFAULT_CHUNKER_OPTIONS = {"chunk_size": 1000, "chunk_overlap": 200}
+DEFAULT_CHUNKER_OPTIONS = {
+    "chunk_size": 1000,
+    "chunk_overlap": 200,
+    "separators": ["\n\n", "\n", ".", "!", "?", " ", ""],
+}
 
 if __name__ == "__main__":
 
@@ -31,7 +38,7 @@ if __name__ == "__main__":
     loader_class = get_env_var("LOADER_CLASS", default=DEFAULT_LOADER_CLASS)
     loader_options_str = get_env_var("LOADER_OPTIONS", "{}")
     loader_options = DEFAULT_LOADER_OPTIONS | parse_json(loader_options_str)
-    chunker_model = get_env_var("CHUNKER_MODEL", default=DEFAULT_CHUNKER_CLASS)
+    chunker_class = get_env_var("CHUNKER_CLASS", default=DEFAULT_CHUNKER_CLASS)
     chunker_options_str = get_env_var("CHUNKER_OPTIONS", "{}")
     chunker_options = DEFAULT_CHUNKER_OPTIONS | parse_json(chunker_options_str)
 
@@ -46,20 +53,29 @@ if __name__ == "__main__":
 
     supabase_client = create_supabase_client(supabase_url, supabase_key)
 
-    documents = ingest_directory(
-        loader_options["directory"],
-        loader_options["metadata"],
-        loader_options["glob_pattern"],
+    if loader_class == "SOMETHING_ELSE":
+        raise NotImplementedError(f"Loader class '{loader_class}' is not implemented.")
+    else:
+        loader_cls = MarkdownFrontmatterLoader
+
+    loader = DirectoryLoader(
+        Path(loader_options["directory"]),
+        glob=loader_options["glob_pattern"],
+        loader_cls=loader_cls,
+        loader_kwargs=loader_options["kwargs"],
     )
+    docs = loader.load()
+    docs = apply_metadata(docs, loader_options)
 
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunker_options["chunk_size"],
-        chunk_overlap=chunker_options["chunk_overlap"],
-        separators=["\n\n", "\n", ".", "!", "?", " ", ""],
-    )
+    if chunker_class == "SOMETHING_ELSE":
+        raise NotImplementedError(
+            f"Chunker class '{chunker_class}' is not implemented."
+        )
+    else:
+        chunker_class = RecursiveCharacterTextSplitter
 
-    chunks = chunk_documents(documents, text_splitter)
-
+    chunker_inst = chunker_class(**chunker_options)
+    chunks = chunk_documents(docs, chunker_inst)
     doc_embeddings = build_document_embeddings(chunks, openai_embeddings)
 
     supabase_write(
@@ -70,5 +86,5 @@ if __name__ == "__main__":
     )
 
     logger.info(
-        f"Successfully ingested {len(documents)} documents and {len(chunks)} chunks."
+        f"Successfully ingested {len(docs)} documents and {len(chunks)} chunks."
     )
