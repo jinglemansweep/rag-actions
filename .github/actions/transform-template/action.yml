@@ -1,0 +1,18 @@
+name: "Transform Template"
+description: "Render Jinja templates from JSON"
+author: "JingleManSweep"
+
+inputs:
+  json:
+    description: "JSON data to render the template with"
+    required: true
+  template_text:
+    description: "Jinja template text to render with query results"
+    required: true
+
+runs:
+  using: docker
+  image: docker://ghcr.io/jinglemansweep/rag-actions:latest
+  env:
+    TEMPLATE_TEXT: ${{ inputs.template_text }}
+  args: ["-m", "rag_action.transform.template"]

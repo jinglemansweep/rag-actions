@@ -1,0 +1,39 @@
+name: "Tests: Transform"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+
+  TransformTemplate:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Transform Template
+        id: main
+        uses: jinglemansweep/rag-actions/.github/actions/query-template@main
+        with:
+          template_text: |
+            {% for doc in docs %}
+            Content: {{ doc.page_content }}
+            Metadata: {{ doc.metadata }}
+            {% endfor %}
+          json: |
+            {"docs": [
+              {"page_content": "Page 1", "metadata": {"source": "test_source"}
+            ]}
