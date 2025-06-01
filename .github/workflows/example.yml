@@ -39,7 +39,7 @@ jobs:
     needs:
       - IngestSkills
     outputs:
-      json: ${{ steps.main.outputs.json }}
+      state: ${{ steps.main.outputs.state }}
     steps:
 
       - name: Checkout
@@ -62,7 +62,7 @@ jobs:
     needs:
       - QuerySearchDevOps
     outputs:
-      json: ${{ steps.main.outputs.json }}
+      state: ${{ steps.main.outputs.state }}
     steps:
 
       - name: Checkout
@@ -79,7 +79,7 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           prompt_text: |
             ${{ vars.PROMPT_RAG }}
-            ${{ needs.QuerySearchDevOps.outputs.json }}
+            ${{ needs.QuerySearchDevOps.outputs.state }}
 
   ChatOutput:
     runs-on: ubuntu-latest
@@ -93,13 +93,13 @@ jobs:
       - name: Output
         id: main
         run: |
-          echo '${{ needs.InferChat.outputs.json }}''
+          echo '${{ needs.InferChat.outputs.state }}''
 
 
   QueryTest1:
     runs-on: ubuntu-latest
     outputs:
-      json: ${{ steps.main.outputs.json }}
+      state: ${{ steps.main.outputs.state }}
     steps:
 
       - name: Checkout
@@ -121,7 +121,7 @@ jobs:
     needs:
       - QueryTest1
     outputs:
-      json: ${{ steps.main.outputs.json }}
+      state: ${{ steps.main.outputs.state }}
     steps:
 
       - name: Checkout
@@ -136,4 +136,4 @@ jobs:
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
-          json: ${{ needs.QueryTest1.outputs.json }}
+          json: ${{ needs.QueryTest1.outputs.state }}
