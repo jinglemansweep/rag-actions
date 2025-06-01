@@ -57,7 +57,9 @@ if __name__ == "__main__":
         loader_cls = MarkdownFrontmatterLoader
 
     if use_directory_loader:
-        loader = DirectoryLoader(loader_cls=loader_cls, loader_kwargs=args)
+        loader = DirectoryLoader(
+            loader_cls=loader_cls, loader_kwargs=loader_args, **args
+        )
     else:
         loader = loader_cls(**loader_args)
 
