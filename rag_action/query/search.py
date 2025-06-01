@@ -2,7 +2,7 @@ import logging
 from ..config import get_env_var
 from ..rag import get_openai_embeddings, supabase_query, docs_json
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce, set_action_ouput
+from ..utils import setup_logger, introduce, set_action_output
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -50,4 +50,4 @@ if __name__ == "__main__":
         top_k=top_k,
     )
 
-    set_action_ouput({"docs": docs_json(documents)})
+    set_action_output({"docs": docs_json(documents)})

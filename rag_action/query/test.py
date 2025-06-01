@@ -1,6 +1,6 @@
 import logging
 from ..config import get_env_var
-from ..utils import setup_logger, introduce, get_action_input, set_action_ouput
+from ..utils import setup_logger, introduce, get_action_input, set_action_output
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -33,4 +33,4 @@ if __name__ == "__main__":
 
     input_json["modified"] = "HelloWorld"
 
-    set_action_ouput(input_json)
+    set_action_output(input_json)

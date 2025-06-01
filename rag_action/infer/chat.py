@@ -1,7 +1,7 @@
 import logging
 from ..config import get_env_var
 from ..rag import model_chat
-from ..utils import setup_logger, introduce, set_action_ouput
+from ..utils import setup_logger, introduce, set_action_output
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -25,4 +25,4 @@ if __name__ == "__main__":
     )
 
     response = model_chat(prompt_text_input, chat_model)
-    set_action_ouput({"text": response.content})
+    set_action_output({"text": response.content})

@@ -57,7 +57,7 @@ def get_action_input() -> dict:
         return {}
 
 
-def set_action_ouput(value: dict) -> None:
+def set_action_output(value: dict) -> None:
     """
     Set an output variable for GitHub Actions.
     """
