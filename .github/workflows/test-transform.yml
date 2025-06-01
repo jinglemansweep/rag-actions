@@ -29,7 +29,7 @@ jobs:
         uses: jinglemansweep/rag-actions/.github/actions/transform-template@main
         with:
           template_text: |
-            {% for doc in docs %}
+            {% for doc in json.docs %}
             Content: {{ doc.page_content }}
             Metadata: {{ doc.metadata }}
             {% endfor %}
