@@ -25,4 +25,4 @@ if __name__ == "__main__":
     )
 
     response = model_chat(prompt_text_input, chat_model)
-    set_action_ouput("json", response.content, output_json=True)
+    set_action_ouput({"text": response.content})

@@ -39,4 +39,4 @@ if __name__ == "__main__":
 
     input_json["modified"] = "HelloWorld"
 
-    set_action_ouput("json", input_json, output_json=True)
+    set_action_ouput(input_json)

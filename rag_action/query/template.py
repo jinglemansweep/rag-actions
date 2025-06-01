@@ -60,4 +60,4 @@ if __name__ == "__main__":
         query=query_text_input, docs=documents
     )
 
-    set_action_ouput("json", rendered, output_json=True)
+    set_action_ouput({"text": rendered})

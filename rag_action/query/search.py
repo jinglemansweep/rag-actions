@@ -51,4 +51,4 @@ if __name__ == "__main__":
         top_k=top_k,
     )
 
-    set_action_ouput("json", {"docs": docs_json(documents)}, output_json=True)
+    set_action_ouput({"docs": docs_json(documents)})

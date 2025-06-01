@@ -44,23 +44,25 @@ def introduce(name: str, config: dict, metadata: Optional[Dict] = None) -> str:
     return message
 
 
-def bash_escape(s):
+def get_action_input() -> dict:
     """
-    Escape string for safe use as a bash variable value.
+    Get JSON input from the environment variable 'JSON'.
+    If the variable is not set or is invalid, return an empty dictionary.
     """
-    return "'" + s.replace("'", "'\\''") + "'"
+    json_input = os.environ.get("INPUT_JSON", "{}")
+    try:
+        return json.loads(json_input)
+    except json.JSONDecodeError as e:
+        logging.error(f"Invalid JSON input: {e}")
+        return {}
 
 
-def set_action_ouput(name: str, value: str | dict, output_json=False) -> None:
+def set_action_ouput(value: dict) -> None:
     """
     Set an output variable for GitHub Actions.
     """
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
-            if output_json:
-                value = {"value": value} if isinstance(value, str) else value
-                print(f"{name}={json.dumps(value, separators=(',', ':'))}", file=fh)
-            else:
-                print(f"{name}={value}", file=fh)
+            print(f"json={json.dumps(value, separators=(',', ':'))}", file=fh)
     except Exception as e:
         logging.warning(f"Failed to set GitHub Actions output: {e}")
