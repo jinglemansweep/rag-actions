@@ -1,5 +1,4 @@
 import os
-from .constants import BaseConfig
 
 
 def get_env_var(var_name: str, default=None, cast_type=str):
@@ -13,13 +12,3 @@ def get_env_var(var_name: str, default=None, cast_type=str):
         return cast_type(value)
     except ValueError as e:
         raise ValueError(f"Invalid value for {var_name}: {value}") from e
-
-
-base_config = BaseConfig(
-    openai_api_key=get_env_var("OPENAI_API_KEY"),
-    supabase_url=get_env_var("SUPABASE_URL"),
-    supabase_key=get_env_var("SUPABASE_KEY"),
-    supabase_table=get_env_var("SUPABASE_TABLE"),
-    supabase_collection=get_env_var("SUPABASE_COLLECTION"),
-    embedding_model=get_env_var("EMBEDDING_MODEL", "text-embedding-ada-002"),
-)
