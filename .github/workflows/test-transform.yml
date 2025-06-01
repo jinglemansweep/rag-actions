@@ -33,7 +33,4 @@ jobs:
             Content: {{ doc.page_content }}
             Metadata: {{ doc.metadata }}
             {% endfor %}
-          json: |
-            {"docs": [
-              {"page_content": "Page 1", "metadata": {"source": "test_source"}
-            ]}
+          json: '{"docs": [{"page_content": "Page 1", "metadata": {"source": "test_source"}]}'
