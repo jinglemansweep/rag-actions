@@ -17,6 +17,9 @@ from ..utils import parse_json
 setup_logger()
 logger = logging.getLogger(__name__)
 
+LOADERS_MAP = {"rss": RSSFeedLoader, "markdown": MarkdownFrontmatterLoader}
+
+CHUNKERS_MAP = {"recursive_character": RecursiveCharacterTextSplitter}
 
 if __name__ == "__main__":
 
@@ -35,11 +38,12 @@ if __name__ == "__main__":
     chunker_class = get_env_var("CHUNKER_CLASS")
     chunker_args_str = get_env_var("CHUNKER_ARGS", "{}")
     chunker_args = parse_json(chunker_args_str)
+
     logger.info(f"OPENAI: model={embedding_model}")
     logger.info(f"SUPABASE: url={supabase_url} table={supabase_table}")
     logger.info(f"ACTION: args={args}")
-    logger.info(f"LOADER: args={loader_args}")
-    logger.info(f"CHUNKER: args={chunker_args}")
+    logger.info(f"LOADER: class={loader_class} args={loader_args}")
+    logger.info(f"CHUNKER: class={chunker_class} args={chunker_args}")
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key
@@ -49,12 +53,9 @@ if __name__ == "__main__":
 
     use_directory_loader = loader_class in ["markdown"]
 
-    if loader_class == "SOMETHING_ELSE":
-        raise NotImplementedError(f"Loader class '{loader_class}' is not implemented.")
-    elif loader_class == "rss":
-        loader_cls = RSSFeedLoader
-    else:  # loader_class == "markdown"
-        loader_cls = MarkdownFrontmatterLoader
+    loader_cls = LOADERS_MAP.get(loader_class)
+    if not loader_cls:
+        raise ValueError(f"Unsupported loader class: {loader_class}")
 
     if use_directory_loader:
         loader = DirectoryLoader(
@@ -66,14 +67,11 @@ if __name__ == "__main__":
     docs = loader.load()
     docs = apply_metadata(docs, metadata)
 
-    if chunker_class == "SOMETHING_ELSE":
-        raise NotImplementedError(
-            f"Chunker class '{chunker_class}' is not implemented."
-        )
-    else:
-        chunker_class = RecursiveCharacterTextSplitter
+    chunker_cls = CHUNKERS_MAP.get(chunker_class)
+    if not chunker_cls:
+        raise ValueError(f"Unsupported chunker class: {chunker_class}")
 
-    chunker_inst = chunker_class(**chunker_args)
+    chunker_inst = chunker_cls(**chunker_args)
     chunks = chunk_documents(docs, chunker_inst)
     doc_embeddings = build_document_embeddings(chunks, openai_embeddings)
 
