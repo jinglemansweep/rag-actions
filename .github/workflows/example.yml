@@ -42,6 +42,9 @@ jobs:
       json: ${{ steps.main.outputs.json }}
     steps:
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Query Search
         id: main
         uses: jinglemansweep/rag-actions/.github/actions/query-search@main
@@ -62,6 +65,9 @@ jobs:
       json: ${{ steps.main.outputs.json }}
     steps:
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Infer Chat
         id: main
         uses: jinglemansweep/rag-actions/.github/actions/infer-chat@main
@@ -81,6 +87,9 @@ jobs:
       - InferChat
     steps:
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Output
         id: main
         run: |
@@ -92,6 +101,9 @@ jobs:
     outputs:
       json: ${{ steps.main.outputs.json }}
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Query Test
         id: main
@@ -111,6 +123,9 @@ jobs:
     outputs:
       json: ${{ steps.main.outputs.json }}
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Query Test
         id: main
