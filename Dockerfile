@@ -1,19 +1,16 @@
-ARG BASE_IMAGE=python:3.11-slim
-ARG WORKDIR=/app
+ARG BASE_IMAGE=python:3.11-alpine
 
 FROM ${BASE_IMAGE}
+LABEL org.opencontainers.image.source=https://github.com/jinglemansweep/rag-actions
 
-ARG WORKDIR
-
-RUN mkdir -p ${WORKDIR} && \
+RUN mkdir -p /app && \
     python3 -m venv /venv && \
     /venv/bin/pip install --upgrade pip && \
     /venv/bin/pip install poetry
 
-COPY ./pyproject.toml ./poetry.lock ${WORKDIR}/
-RUN . /venv/bin/activate && /venv/bin/poetry install --no-root
-COPY . ${WORKDIR}/
+COPY ./entrypoint.sh /entrypoint.sh
+COPY ./pyproject.toml ./poetry.lock /app/
+RUN . /venv/bin/activate && cd /app/ && /venv/bin/poetry install --no-root
+COPY . /app/
 
-ENTRYPOINT ["/venv/bin/python"]
-
-LABEL org.opencontainers.image.source=https://github.com/jinglemansweep/rag-actions
+ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]
