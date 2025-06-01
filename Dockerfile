@@ -9,12 +9,10 @@ RUN python3 -m venv /venv && \
     /venv/bin/pip install --upgrade pip && \
     /venv/bin/pip install poetry
 
-WORKDIR ${WORKDIR}
-
 COPY ./pyproject.toml ./poetry.lock ${WORKDIR}/
 RUN . /venv/bin/activate && /venv/bin/poetry install --no-root
 COPY . ${WORKDIR}/
 
 ENTRYPOINT ["/venv/bin/python"]
 
-LABEL org.opencontainers.image.source https://github.com/jinglemansweep/rag-actions
+LABEL org.opencontainers.image.source=https://github.com/jinglemansweep/rag-actions
