@@ -1,6 +1,5 @@
 import glob
 import hashlib
-import json
 import logging
 import os
 from langchain_core.documents import Document
@@ -14,9 +13,6 @@ from pathlib import Path
 from supabase import Client  # type: ignore
 from typing import Dict, List
 
-from .utils import setup_logger
-
-setup_logger()
 logger = logging.getLogger(__name__)
 
 
@@ -76,19 +72,6 @@ def compute_chunk_hash(text: str) -> str:
     Compute a hash of chunk text for deduplication.
     """
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
-def parse_metadata(metadata_str: str, db_collection: str) -> Dict:
-    """
-    Parse metadata from a JSON string.
-    """
-    try:
-        metadata = json.loads(metadata_str)
-        metadata["_collection"] = db_collection
-        return metadata
-    except json.JSONDecodeError as e:
-        logger.warning(f"Invalid JSON in metadata: {e}")
-        return {}
 
 
 def build_metadata_filter(db_collection: str) -> dict:

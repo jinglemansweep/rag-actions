@@ -1,4 +1,8 @@
+import logging
 from supabase import create_client, Client  # type: ignore
+
+
+logger = logging.getLogger(__name__)
 
 
 def build_supabase_client(supabase_url: str, supabase_key: str) -> Client:

@@ -30,10 +30,14 @@ inputs:
     description: "Chunk overlap for text splitting"
     required: false
     default: "200"
-  ingest_dir:
+  directory:
     description: "Content ingestion directory"
     required: true
-  ingest_metadata:
+  glob_pattern:
+    description: "Glob pattern to match files in the directory"
+    required: false
+    default: "*.md"
+  metadata:
     description: "Metadata for the ingestion"
     required: false
     default: "{}"
@@ -49,10 +53,9 @@ runs:
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
-    SUPABASE_COLLECTION: ${{ inputs.supabase_collection }}
     CHUNK_SIZE: ${{ inputs.chunk_size }}
     CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
-    INGEST_DIR: ${{ inputs.ingest_dir }}
-    INGEST_METADATA: ${{ inputs.ingest_metadata }}
-    STATE_JSON: ${{ inputs.state_json }}
+    DIRECTORY: ${{ inputs.directory }}
+    GLOB_PATTERN: ${{ inputs.glob_pattern }}
+    METADATA: ${{ inputs.metadata }}
   args: ["-m", "rag_action.ingest.directory"]

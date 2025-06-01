@@ -27,6 +27,5 @@ jobs:
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
-          supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_test"
-          ingest_dir: "./test/content/test"
-          ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
+          directory: "./test/content/test"
+          metadata: '{"collection": "${{ vars.SUPABASE_COLLECTION }}", "github": {"run": "${{ github.run_id }}"}}'
