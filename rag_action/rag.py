@@ -33,10 +33,7 @@ def docs_json(docs: List[Document]) -> List[Dict[str, str]]:
     """
     Convert a list of Document objects to a list of dictionaries.
     """
-    return [
-        {"id": doc.id, "content": doc.page_content, "metadata": doc.metadata}
-        for doc in docs
-    ]
+    return [{"content": doc.page_content, "metadata": doc.metadata} for doc in docs]
 
 
 def chunk_documents(
