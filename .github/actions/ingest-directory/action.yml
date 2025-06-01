@@ -37,6 +37,10 @@ inputs:
     description: "Metadata for the ingestion"
     required: false
     default: "{}"
+  state_json:
+    description: "JSON state from previous steps"
+    required: false
+    default: "{}"
 
 runs:
   using: docker
@@ -52,4 +56,5 @@ runs:
     CHUNK_OVERLAP: ${{ inputs.chunk_overlap }}
     INGEST_DIR: ${{ inputs.ingest_dir }}
     INGEST_METADATA: ${{ inputs.ingest_metadata }}
+    STATE_JSON: ${{ inputs.state_json }}
   args: ["-m", "rag_action.ingest.directory"]

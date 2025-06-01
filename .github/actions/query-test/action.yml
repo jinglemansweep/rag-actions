@@ -22,9 +22,10 @@ inputs:
   supabase_collection:
     description: "Supabase collection name"
     required: true
-  json:
-    description: "JSON input"
-    required: true
+  state_json:
+    description: "JSON state from previous steps"
+    required: false
+    default: "{}"
 
 runs:
   using: docker
@@ -36,5 +37,5 @@ runs:
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
     SUPABASE_COLLECTION: ${{ inputs.supabase_collection }}
-    JSON: ${{ inputs.json }}
+    STATE_JSON: ${{ inputs.state_json }}
   args: ["-m", "rag_action.query.test"]

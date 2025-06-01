@@ -9,10 +9,15 @@ inputs:
   template_text:
     description: "Jinja template text to render with query results"
     required: true
+  state_json:
+    description: "JSON state from previous steps"
+    required: false
+    default: "{}"
 
 runs:
   using: docker
   image: docker://ghcr.io/jinglemansweep/rag-actions:main
   env:
     TEMPLATE_TEXT: ${{ inputs.template_text }}
+    STATE_JSON: ${{ inputs.state_json }}
   args: ["-m", "rag_action.transform.template"]

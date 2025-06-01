@@ -33,6 +33,10 @@ inputs:
   prompt_text:
     description: "Query text to search in the RAG system"
     required: true
+  state_json:
+    description: "JSON state from previous steps"
+    required: false
+    default: "{}"
 
 runs:
   using: docker
@@ -46,4 +50,5 @@ runs:
     SUPABASE_COLLECTION: ${{ inputs.supabase_collection }}
     CHAT_MODEL: ${{ inputs.chat_model }}
     PROMPT_TEXT: ${{ inputs.prompt_text }}
+    STATE_JSON: ${{ inputs.state_json }}
   args: ["-m", "rag_action.infer.chat"]

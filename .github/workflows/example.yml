@@ -114,7 +114,7 @@ jobs:
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
-          json: '{"query": "devops"}'
+          state_json: '{"inputs": {"query": "devops"}}'
 
   QueryTest2:
     runs-on: ubuntu-latest
@@ -136,4 +136,4 @@ jobs:
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
-          json: ${{ needs.QueryTest1.outputs.state }}
+          state_json: ${{ needs.QueryTest1.outputs.state }}
