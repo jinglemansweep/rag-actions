@@ -73,7 +73,7 @@ if __name__ == "__main__":
         loader = loader_cls(urls=[loader_options["url"]])
 
     docs = loader.load()
-    docs = apply_metadata(docs, loader_options)
+    docs = apply_metadata(docs, loader_options["metadata"])
 
     if chunker_class == "SOMETHING_ELSE":
         raise NotImplementedError(
