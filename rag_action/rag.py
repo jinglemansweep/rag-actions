@@ -29,6 +29,16 @@ def model_chat(prompt: str, chat_model: str) -> BaseMessage:
     return response
 
 
+def docs_json(docs: List[Document]) -> List[Dict[str, str]]:
+    """
+    Convert a list of Document objects to a list of dictionaries.
+    """
+    return [
+        {"id": doc.id, "content": doc.page_content, "metadata": doc.metadata}
+        for doc in docs
+    ]
+
+
 def chunk_documents(
     docs: List[Document], chunk_size: int, chunk_overlap: int
 ) -> List[Document]:

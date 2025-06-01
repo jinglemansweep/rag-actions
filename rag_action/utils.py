@@ -1,9 +1,8 @@
-import dataclasses
 import json
 import logging
 import os
 from typing import Dict, Optional
-from .constants import BaseConfig
+
 
 # LOG_FORMAT = "%(name)-25s %(levelname)-7s %(message)s"
 LOG_FORMAT = "%(message)s"
@@ -27,21 +26,16 @@ def setup_logger() -> None:
     )
 
 
-def introduce(
-    name: str, config: BaseConfig, params: dict, metadata: Optional[Dict] = None
-) -> str:
+def introduce(name: str, config: dict, metadata: Optional[Dict] = None) -> str:
     """
     Print a formatted introduction message.
     """
     message = ""
     message += f"{'=' * 80}\n{name}\n{'=' * 80}\n\n"
     message += "Configuration:\n"
-    for k, v in dataclasses.asdict(config).items():
+    for k, v in config.items():
         if k in ["openai_api_key", "supabase_key"]:
             v = "********"
-        message += f"  - {k}: {v}\n"
-    message += "Parameters:\n"
-    for k, v in params.items():
         message += f"  - {k}: {v}\n"
     if metadata:
         message += "Metadata:\n"
@@ -63,7 +57,6 @@ def set_action_ouput(name: str, value: str | dict, output_json=False) -> None:
     """
     try:
         with open(os.environ.get("GITHUB_OUTPUT", "/tmp/nothing"), "a") as fh:
-            print(value)
             if output_json:
                 value = {"value": value} if isinstance(value, str) else value
                 print(f"{name}={json.dumps(value, separators=(',', ':'))}", file=fh)

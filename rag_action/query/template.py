@@ -1,5 +1,6 @@
 import logging
 from jinja2 import Template
+from ..config import get_env_var
 from ..rag import (
     get_openai_embeddings,
     supabase_query,
@@ -13,8 +14,13 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
 
-    from ..config import base_config, get_env_var
+    openai_api_key = get_env_var("OPENAI_API_KEY")
+    supabase_url = get_env_var("SUPABASE_URL")
+    supabase_key = get_env_var("SUPABASE_KEY")
+    supabase_table = get_env_var("SUPABASE_TABLE")
+    supabase_collection = get_env_var("SUPABASE_COLLECTION")
 
+    embedding_model = get_env_var("EMBEDDING_MODEL", "text-embedding-ada-002")
     query_text_input = get_env_var("QUERY_TEXT")
     top_k = get_env_var("TOP_K", "5", int)
     template_text_input = get_env_var("TEMPLATE_TEXT")
@@ -22,8 +28,13 @@ if __name__ == "__main__":
     logger.info(
         introduce(
             "Vector Store Template",
-            base_config,
             {
+                "openai_api_key": openai_api_key,
+                "supabase_url": supabase_url,
+                "supabase_key": supabase_key,
+                "supabase_table": supabase_table,
+                "supabase_collection": supabase_collection,
+                "embedding_model": embedding_model,
                 "query_text": query_text_input,
                 "top_k": top_k,
                 "template_text": template_text_input,
@@ -32,17 +43,15 @@ if __name__ == "__main__":
     )
 
     openai_embeddings = get_openai_embeddings(
-        model=base_config.embedding_model, api_key=base_config.openai_api_key
+        model=embedding_model, api_key=openai_api_key
     )
-    supabase_client = create_supabase_client(
-        base_config.supabase_url, base_config.supabase_key
-    )
+    supabase_client = create_supabase_client(supabase_url, supabase_key)
 
     documents = supabase_query(
         query_text_input,
         supabase_client=supabase_client,
-        db_table=base_config.supabase_table,
-        db_collection=base_config.supabase_collection,
+        db_table=supabase_table,
+        db_collection=supabase_collection,
         embeddings=openai_embeddings,
         top_k=top_k,
     )
@@ -50,5 +59,5 @@ if __name__ == "__main__":
     rendered = Template(template_text_input).render(
         query=query_text_input, docs=documents
     )
-    logger.info(f"Rendered Template:\n\n{rendered}")
+
     set_action_ouput("json", rendered, output_json=True)
