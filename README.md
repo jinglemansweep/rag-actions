@@ -12,36 +12,53 @@ Create a Supabase account and database and create required vector tables and fun
 
 All workflows require the same base configuration, consisting of an OpenAI API Key, Supabase URL and API Key which should be created as GitHub secrets so they can be reused across multiple workflows.
 
-## Ingest: Directory
+## Ingestion
 
-This action can currently index text files and other unstructured documents, usually located in a directory within a Git repository.
+Markdown Directory Example:
 
-Example Usage:
-
-    - name: Ingest Directory
-      uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
+    - name: Markdown Directory Ingestion
+      uses: jinglemansweep/rag-actions/.github/actions/ingest-loader@main
       with:
         openai_api_key: ${{ secrets.OPENAI_API_KEY }}
         supabase_url: ${{ secrets.SUPABASE_URL }}
         supabase_key: ${{ secrets.SUPABASE_KEY }}
-        supabase_table: "documents"
-        ingest_dir: "./test/content"
-        ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
+        supabase_table: ${{ vars.SUPABASE_TABLE }}
+        metadata: |
+          {
+            "collection": "${{ vars.SUPABASE_COLLECTION }}",
+            "github": {
+              "run": "${{ github.run_id }}"
+            }
+          }
+        args: |
+          {
+            "path": "./test/content/test",
+            "glob": "**/*.md"
+          }
+        loader_class: "markdown"
+        loader_args: '{}'
+        chunker_class: "recursive_character"
+        chunker_args: '{"chunk_size": 1000, "chunk_overlap": 200}'
 
-## Ingest: Text
+RSS Feed Example:
 
-This action can currently index simple text fragments.
-
-Example Usage:
-
-    - name: Ingest Text
-      uses: jinglemansweep/rag-actions/.github/actions/ingest-text@main
-      with:
-        openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-        supabase_url: ${{ secrets.SUPABASE_URL }}
-        supabase_key: ${{ secrets.SUPABASE_KEY }}
-        supabase_table: "documents"
-        ingest_text: |
-          Hello, this is some example text, generated dynamically
-          by a GitHub Action Run ${{ github.run_id }}
-        ingest_metadata: '{"github": {"run": "${{ github.run_id }}"}}'
+      - name: RSS Feed Ingestion
+        uses: jinglemansweep/rag-actions/.github/actions/ingest-loader@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          metadata: |
+            {
+              "collection": "${{ vars.SUPABASE_COLLECTION }}",
+              "feed": "news",
+              "source": "bbc"
+            }
+          loader_class: "rss"
+          loader_args: |
+            {
+              "urls": [
+                "https://feeds.bbci.co.uk/news/rss.xml"
+              ]
+            }
