@@ -17,11 +17,12 @@ if __name__ == "__main__":
             "Transform Template",
             {
                 "template_text": template_text_input,
+                "json": input_json,
             },
         )
     )
 
-    rendered = Template(template_text_input).render(query="testquery", json=[])
+    rendered = Template(template_text_input).render(json=input_json)
 
     logger.info(f"Output:\n\n{rendered}")
     set_action_output({"text": rendered})
