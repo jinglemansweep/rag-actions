@@ -73,7 +73,7 @@ jobs:
           supabase_collection: "${{ vars.SUPABASE_COLLECTION }}_example"
           prompt_text: |
             ${{ vars.PROMPT_RAG }}
-            ${{ jobs.QuerySearchDevOps.outputs.json }}
+            ${{ needs.QuerySearchDevOps.outputs.json }}
 
   ChatOutput:
     runs-on: ubuntu-latest
@@ -84,7 +84,7 @@ jobs:
       - name: Output
         id: main
         run: |
-          echo '${{ job.InferChat.outputs.json }}'
+          echo '${{ needs.InferChat.outputs.json }}''
 
 
   QueryTest1:
