@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     logger.info(
         introduce(
-            "Vector Store Query",
+            "Test",
             {
                 "openai_api_key": openai_api_key,
                 "supabase_url": supabase_url,
