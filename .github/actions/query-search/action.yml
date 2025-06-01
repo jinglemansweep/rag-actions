@@ -32,7 +32,7 @@ inputs:
 
 runs:
   using: docker
-  image: ../../../Dockerfile
+  image: ghcr.io/jinglemansweep/rag-actions:latest
   env:
     OPENAI_API_KEY: ${{ inputs.openai_api_key }}
     EMBEDDING_MODEL: ${{ inputs.embedding_model }}
