@@ -5,7 +5,8 @@ FROM ${BASE_IMAGE}
 
 ARG WORKDIR
 
-RUN python3 -m venv /venv && \
+RUN mkdir -p ${WORKDIR} && \
+    python3 -m venv /venv && \
     /venv/bin/pip install --upgrade pip && \
     /venv/bin/pip install poetry
 
