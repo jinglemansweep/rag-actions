@@ -1,18 +1,43 @@
 import hashlib
 import logging
+import re
+import yaml
 from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage
 from langchain.chat_models import init_chat_model
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
-from langchain_community.document_loaders import UnstructuredMarkdownLoader
+from langchain.document_loaders.base import BaseLoader
 from langchain_community.document_loaders import DirectoryLoader
 from pathlib import Path
 from supabase import Client  # type: ignore
 from typing import Dict, List
 
 logger = logging.getLogger(__name__)
+
+
+class MarkdownFrontmatterLoader(BaseLoader):
+    def __init__(self, file_path):
+        """Load a markdown file and parse YAML frontmatter to document metadata."""
+        self.file_path = file_path
+
+    def load(self):
+        with open(self.file_path, "r", encoding="utf-8") as f:
+            text = f.read()
+
+        # Regex to extract frontmatter block
+        pattern = r"^---\s*\n(.*?\n?)^---\s*\n"  # Non-greedy, multiline
+        match = re.search(pattern, text, flags=re.DOTALL | re.MULTILINE)
+        metadata = {}
+        body = text
+        if match:
+            frontmatter = match.group(1)
+            metadata = yaml.safe_load(frontmatter) or {}
+            body = text[match.end() :]
+
+        # Return Document with extracted metadata
+        return [Document(page_content=body.strip(), metadata=metadata)]
 
 
 def model_chat(prompt: str, chat_model: str) -> BaseMessage:
@@ -144,11 +169,12 @@ def ingest_directory(directory: str, metadata: Dict, pattern="*.md") -> List[Doc
     loader = DirectoryLoader(
         Path(directory),
         glob=pattern,
-        loader_cls=UnstructuredMarkdownLoader,
+        loader_cls=MarkdownFrontmatterLoader,
         loader_kwargs={},
     )
     docs = loader.load()
     for doc in docs:
+        print(doc)
         doc_metadata = metadata.copy()
         doc_metadata.update(doc.metadata or {})
         doc.metadata = doc_metadata

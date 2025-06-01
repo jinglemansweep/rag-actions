@@ -1,3 +1,10 @@
+---
+category: tooling
+tags:
+  - hello
+  - world
+---
+
 # Terraform
 
 Terraform is the leading IaC (Infrastucture as Code) tool and is one of the core components of the DevOps tooling. Due to licencing changes, there is now a community fork called OpenTofu. There is also Terragrunt which improves reusability between Terraform environments.

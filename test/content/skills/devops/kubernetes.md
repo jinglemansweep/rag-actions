@@ -1,3 +1,7 @@
+---
+category: tooling
+---
+
 # Kubernetes
 
 Kubernetes and its entire ecosystem including OpenShift, Talos, K32 and MicroK8S.
