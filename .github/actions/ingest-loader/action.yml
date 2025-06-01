@@ -56,4 +56,4 @@ runs:
     DIRECTORY: ${{ inputs.directory }}
     GLOB_PATTERN: ${{ inputs.glob_pattern }}
     METADATA: ${{ inputs.metadata }}
-  args: ["-m", "rag_action.ingest.directory"]
+  args: ["-m", "rag_action.ingest.loader"]
