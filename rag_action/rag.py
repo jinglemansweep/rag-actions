@@ -174,21 +174,7 @@ def ingest_directory(directory: str, metadata: Dict, pattern="*.md") -> List[Doc
     )
     docs = loader.load()
     for doc in docs:
-        print(doc)
         doc_metadata = metadata.copy()
         doc_metadata.update(doc.metadata or {})
-        doc.metadata = doc_metadata
-    return docs
-
-
-def ingest_text(text: str, metadata: Dict) -> List[Document]:
-    """
-    Ingest a single text string as a Document.
-    """
-    docs = [Document(page_content=text, metadata=metadata)]
-    for doc in docs:
-        doc_metadata = metadata.copy()
-        doc_metadata.update(doc.metadata or {})
-        doc_metadata["loader"] = "text"
         doc.metadata = doc_metadata
     return docs
