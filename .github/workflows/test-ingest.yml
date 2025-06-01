@@ -16,10 +16,14 @@ permissions:
 jobs:
 
   IngestLoaderDirectory:
+
     runs-on: ubuntu-latest
+
     steps:
+
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Directory Ingestion
         uses: jinglemansweep/rag-actions/.github/actions/ingest-loader@main
         with:

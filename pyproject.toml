@@ -22,6 +22,10 @@ pydantic = "^2.11.5"
 unstructured = {extras = ["md"], version = "^0.17.2"}
 nltk = "^3.9.1"
 langchain-text-splitters = "^0.3.8"
+feedparser = "^6.0.11"
+newspaper3k = "^0.2.8"
+listparser = "^0.20"
+lxml = {extras = ["html-clean"], version = "^5.4.0"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"

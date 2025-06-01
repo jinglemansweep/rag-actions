@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from langchain_community.document_loaders import DirectoryLoader
+from langchain_community.document_loaders import DirectoryLoader, RSSFeedLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from ..config import get_env_var
 from ..logger import setup_logger
@@ -53,17 +53,25 @@ if __name__ == "__main__":
 
     supabase_client = create_supabase_client(supabase_url, supabase_key)
 
+    use_directory_loader = loader_class in ["markdown"]
+
     if loader_class == "SOMETHING_ELSE":
         raise NotImplementedError(f"Loader class '{loader_class}' is not implemented.")
+    elif loader_class == "rss":
+        loader_cls = RSSFeedLoader
     else:
         loader_cls = MarkdownFrontmatterLoader
 
-    loader = DirectoryLoader(
-        Path(loader_options["directory"]),
-        glob=loader_options["glob_pattern"],
-        loader_cls=loader_cls,
-        loader_kwargs=loader_options["kwargs"],
-    )
+    if use_directory_loader:
+        loader = DirectoryLoader(
+            Path(loader_options["directory"]),
+            glob=loader_options["glob_pattern"],
+            loader_cls=loader_cls,
+            loader_kwargs=loader_options["kwargs"],
+        )
+    else:
+        loader = loader_cls(urls=[loader_options["url"]])
+
     docs = loader.load()
     docs = apply_metadata(docs, loader_options)
 

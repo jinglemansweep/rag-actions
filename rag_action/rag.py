@@ -1,4 +1,5 @@
 import hashlib
+import json
 import logging
 import re
 import yaml
@@ -54,7 +55,7 @@ def apply_metadata(docs: List[Document], metadata: dict) -> List[Document]:
     for doc in docs:
         new_metadata = metadata.copy()
         new_metadata.update(doc.metadata or {})
-        doc.metadata = new_metadata
+        doc.metadata = json.loads(json.dumps(new_metadata, default=str))
     return docs
 
 
