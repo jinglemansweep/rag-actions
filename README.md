@@ -14,6 +14,19 @@ All workflows require the same base configuration, consisting of an OpenAI API K
 
 ## Ingestion
 
+Inputs:
+
+* `openai_api_key`: OpenAI API key
+* `supabase_url`: Supabase URL
+* `supabase_key`: Supabase API key
+* `supabase_table`: Supabase table
+* `metadata`: Metadata **(dict)**
+* `args`: General arguments **(dict)**
+* `loader_class`: Document loader class alias *(default: `markdown`)*
+* `loader_args`: Document loader class arguments *(default: `{}`)*
+* `chunker_class`: Chunker class alias *(default: `recursive_character`)*
+* `chunker_args`: Chunker class arguments *(default: `{"chunk_size": 1000, "chunk_overlap": 200}`)*
+
 Markdown Directory Example:
 
     - name: Markdown Directory Ingestion
