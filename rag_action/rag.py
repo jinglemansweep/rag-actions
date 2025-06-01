@@ -1,14 +1,13 @@
-import glob
 import hashlib
 import logging
-import os
 from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage
 from langchain.chat_models import init_chat_model
-from langchain_community.document_loaders import TextLoader  # , UnstructuredURLLoader
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
+from langchain_community.document_loaders import UnstructuredMarkdownLoader
+from langchain_community.document_loaders import DirectoryLoader
 from pathlib import Path
 from supabase import Client  # type: ignore
 from typing import Dict, List
@@ -142,17 +141,16 @@ def ingest_directory(directory: str, metadata: Dict, pattern="*.md") -> List[Doc
     """
     Ingest documents from a directory, loading files matching the pattern.
     """
-    docs: List[Document] = []
-    if Path(directory).exists():
-        for file_path in glob.glob(os.path.join(directory, pattern)):
-            logger.info(f"Loading file: {file_path}")
-            docs.extend(TextLoader(file_path).load())
-    else:
-        logger.warning("Directory does not exist, skipping ingestion")
+    loader = DirectoryLoader(
+        Path(directory),
+        glob=pattern,
+        loader_cls=UnstructuredMarkdownLoader,
+        loader_kwargs={},
+    )
+    docs = loader.load()
     for doc in docs:
         doc_metadata = metadata.copy()
         doc_metadata.update(doc.metadata or {})
-        doc_metadata["loader"] = "directory"
         doc.metadata = doc_metadata
     return docs
 

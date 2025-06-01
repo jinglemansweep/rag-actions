@@ -1,3 +1,5 @@
+category: tooling
+---
 # Ansible
 
 Ansible is the defacto provisioning tool in the DevOps space. It enables the provisioning and configuration of many operating systems including Linux, MacOS and Windows.
