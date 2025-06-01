@@ -26,7 +26,7 @@ jobs:
 
       - name: Transform Template
         id: main
-        uses: jinglemansweep/rag-actions/.github/actions/query-template@main
+        uses: jinglemansweep/rag-actions/.github/actions/transform-template@main
         with:
           template_text: |
             {% for doc in docs %}
