@@ -15,17 +15,29 @@ permissions:
 
 jobs:
 
-  IngestDirectory:
+  IngestLoaderDirectory:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Directory Ingestion
-        uses: jinglemansweep/rag-actions/.github/actions/ingest-directory@main
+        uses: jinglemansweep/rag-actions/.github/actions/ingest-loader@main
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
           supabase_url: ${{ secrets.SUPABASE_URL }}
           supabase_key: ${{ secrets.SUPABASE_KEY }}
           supabase_table: ${{ vars.SUPABASE_TABLE }}
-          directory: "./test/content/test"
+          loader_class: "markdown"
+          loader_options: |
+            {
+              "directory": "./test/content/test",
+              "metadata": {
+                "collection": "${{ vars.SUPABASE_COLLECTION }}",
+                "github": {
+                  "run": "${{ github.run_id }}"
+                }
+              }
+            }
+          chunk_class: "recursive_character"
+          chunker_options: '{"chunk_size": 1000, "chunk_overlap": 200}'
           metadata: '{"collection": "${{ vars.SUPABASE_COLLECTION }}", "github": {"run": "${{ github.run_id }}"}}'

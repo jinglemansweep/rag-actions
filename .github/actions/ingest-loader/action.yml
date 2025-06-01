@@ -1,5 +1,5 @@
-name: "RAG Directory Ingest"
-description: "Loads content from a directory, chunks, creates embeddings, stores in Supabase"
+name: "Ingest Loader"
+description: "Loads content from a various sources"
 author: "JingleManSweep"
 
 inputs:
@@ -19,24 +19,22 @@ inputs:
   supabase_table:
     description: "Supabase table name"
     required: true
-  supabase_collection:
-    description: "Supabase collection name"
-    required: true
-  chunk_size:
-    description: "Chunk size for text splitting"
+  loader_class:
+    description: "Loader class for reading files"
     required: false
-    default: "10000"
-  chunk_overlap:
-    description: "Chunk overlap for text splitting"
+    default: "markdown"
+  loader_options:
+    description: "Options for the loader class"
     required: false
-    default: "200"
-  directory:
-    description: "Content ingestion directory"
-    required: true
-  glob_pattern:
-    description: "Glob pattern to match files in the directory"
+    default: "{}"
+  chunk_class:
+    description: "Chunk class for text splitting"
     required: false
-    default: "*.md"
+    default: "RecursiveCharacterTextSplitter"
+  chunker_options:
+    description: "Options for the chunker class"
+    required: false
+    default: "{}"
   metadata:
     description: "Metadata for the ingestion"
     required: false

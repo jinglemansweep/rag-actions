@@ -6,7 +6,7 @@ from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage
 from langchain.chat_models import init_chat_model
 from langchain_community.vectorstores import SupabaseVectorStore
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import TextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain.document_loaders.base import BaseLoader
 from langchain_community.document_loaders import DirectoryLoader
@@ -50,19 +50,14 @@ def model_chat(prompt: str, chat_model: str) -> BaseMessage:
 
 
 def chunk_documents(
-    docs: List[Document], chunk_size: int, chunk_overlap: int
+    docs: List[Document], text_splitter: TextSplitter
 ) -> List[Document]:
     """
     Split documents into smaller chunks.
     """
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap,
-        separators=["\n\n", "\n", ".", "!", "?", " ", ""],
-    )
     chunks = []
     for doc in docs:
-        splits = splitter.split_documents([doc])
+        splits = text_splitter.split_documents([doc])
         chunks.extend(splits)
     logger.debug(f"Chunked to {len(chunks)} segments")
     return chunks
