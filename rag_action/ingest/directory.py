@@ -28,11 +28,10 @@ if __name__ == "__main__":
     metadata_str = get_env_var("METADATA", "{}")
     metadata = parse_json(metadata_str)
 
-    logger.info(f"OPENAI:    model={embedding_model}")
-    logger.info(f"SUPABASE:  url={supabase_url} table={supabase_table}")
-    logger.info(
-        f"INGEST:    directory={directory} glob_pattern={glob_pattern} metadata={metadata} chunk_size={chunk_size} chunk_overlap={chunk_overlap}"
-    )
+    logger.info(f"OPENAI: model={embedding_model}")
+    logger.info(f"SUPABASE: url={supabase_url} table={supabase_table}")
+    logger.info(f"INGEST: dir={directory} glob={glob_pattern} metadata={metadata}")
+    logger.info(f"CHUNKING: chunk_size={chunk_size} chunk_overlap={chunk_overlap}")
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key

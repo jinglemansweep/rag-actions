@@ -25,13 +25,6 @@ def model_chat(prompt: str, chat_model: str) -> BaseMessage:
     return response
 
 
-def docs_json(docs: List[Document]) -> List[Dict[str, str]]:
-    """
-    Convert a list of Document objects to a list of dictionaries.
-    """
-    return [{"content": doc.page_content, "metadata": doc.metadata} for doc in docs]
-
-
 def chunk_documents(
     docs: List[Document], chunk_size: int, chunk_overlap: int
 ) -> List[Document]:
@@ -155,7 +148,7 @@ def ingest_directory(directory: str, metadata: Dict, pattern="*.md") -> List[Doc
             logger.info(f"Loading file: {file_path}")
             docs.extend(TextLoader(file_path).load())
     else:
-        logger.warning("No CONTENT_DIR specified.")
+        logger.warning("Directory does not exist, skipping ingestion")
     for doc in docs:
         doc_metadata = metadata.copy()
         doc_metadata.update(doc.metadata or {})
