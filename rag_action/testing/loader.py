@@ -2,6 +2,7 @@ import logging
 from langchain_core.documents import Document
 from ..constants import StateMessage
 from ..github import get_action_input, set_action_output
+from ..rag import ingest_directory
 from ..utils import setup_logger
 
 setup_logger()
@@ -22,10 +23,6 @@ if __name__ == "__main__":
 
     input_state = get_action_input()
 
-    set_action_output(
-        StateMessage(
-            docs=input_state.docs,
-            outputs={"test_output": "result"},
-            metadata={"test_metadata": "info"},
-        )
-    )
+    docs = ingest_directory(input_state.inputs.get("directory", ""), {})
+
+    set_action_output(StateMessage(docs=docs, outputs={"count": len(docs)}))
