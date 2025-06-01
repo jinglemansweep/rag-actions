@@ -56,9 +56,10 @@ runs:
     SUPABASE_URL: ${{ inputs.supabase_url }}
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
-    OPTIONS: ${{ inputs.options }}
+    METADATA: ${{ inputs.metadata }}
+    ARGS: ${{ inputs.args }}
     LOADER_CLASS: ${{ inputs.loader_class }}
-    LOADER_OPTIONS: ${{ inputs.loader_options }}
+    LOADER_ARGS: ${{ inputs.loader_args }}
     CHUNKER_CLASS: ${{ inputs.chunk_class }}
-    CHUNKER_OPTIONS: ${{ inputs.chunker_options }}
+    CHUNKER_ARGS: ${{ inputs.chunker_args }}
   args: ["-m", "rag_action.ingest.loader"]
