@@ -18,6 +18,7 @@ tiktoken = "^0.9.0"
 langchain-openai = "^0.3.18"
 types-requests = "^2.32.0.20250515"
 jinja2 = "^3.1.6"
+pydantic = "^2.11.5"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"

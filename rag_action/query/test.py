@@ -1,36 +1,39 @@
 import logging
-from ..config import get_env_var
+from langchain_core.documents import Document
+from ..constants import StateMessage
 from ..utils import setup_logger, introduce, get_action_input, set_action_output
 
 setup_logger()
 logger = logging.getLogger(__name__)
 
+DOCS = [
+    Document(
+        page_content="This is a sample document.", metadata={"source": "example_source"}
+    ),
+    Document(
+        page_content="This is another sample document.",
+        metadata={"source": "another_source"},
+    ),
+]
+
 
 if __name__ == "__main__":
 
-    openai_api_key = get_env_var("OPENAI_API_KEY")
-    supabase_url = get_env_var("SUPABASE_URL")
-    supabase_key = get_env_var("SUPABASE_KEY")
-    supabase_table = get_env_var("SUPABASE_TABLE")
-    supabase_collection = get_env_var("SUPABASE_COLLECTION")
-
-    input_json = get_action_input()
+    input_state = get_action_input()
 
     logger.info(
         introduce(
             "Test",
             {
-                "openai_api_key": openai_api_key,
-                "supabase_url": supabase_url,
-                "supabase_key": supabase_key,
-                "supabase_table": supabase_table,
-                "supabase_collection": supabase_collection,
-                "embedding_model": "text-embedding-ada-002",
-                "json": input_json,
+                "input_state": input_state,
             },
         )
     )
 
-    input_json["modified"] = "HelloWorld"
-
-    set_action_output(input_json)
+    set_action_output(
+        StateMessage(
+            docs=input_state.docs,
+            outputs={"test_output": "result"},
+            metadata={"test_metadata": "info"},
+        )
+    )

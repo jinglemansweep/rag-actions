@@ -1,8 +1,9 @@
 import logging
+from ..constants import StateMessage
 from ..config import get_env_var
 from ..rag import get_openai_embeddings, supabase_query, docs_json
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce, set_action_output
+from ..utils import setup_logger, introduce, get_action_input, set_action_output
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -19,6 +20,8 @@ if __name__ == "__main__":
     embedding_model = get_env_var("EMBEDDING_MODEL", "text-embedding-ada-002")
     query_text_input = get_env_var("QUERY_TEXT")
     top_k = get_env_var("TOP_K", "5", int)
+
+    input_state = get_action_input()
 
     logger.info(
         introduce(
@@ -50,4 +53,14 @@ if __name__ == "__main__":
         top_k=top_k,
     )
 
-    set_action_output({"docs": docs_json(documents)})
+    set_action_output(
+        StateMessage(
+            docs=docs_json(documents),
+            inputs={
+                "query_text": query_text_input,
+                "top_k": top_k,
+                "embedding_model": embedding_model,
+            },
+            outputs={"count": len(documents)},
+        )
+    )

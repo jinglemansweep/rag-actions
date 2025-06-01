@@ -1,4 +1,5 @@
 import logging
+from ..constants import StateMessage
 from ..config import get_env_var
 from ..rag import (
     chunk_documents,
@@ -9,7 +10,7 @@ from ..rag import (
     ingest_text,
 )
 from ..supabase import create_client as create_supabase_client
-from ..utils import setup_logger, introduce
+from ..utils import setup_logger, introduce, get_action_input, set_action_output
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -29,6 +30,8 @@ if __name__ == "__main__":
     ingest_metadata = get_env_var("INGEST_METADATA", "{}")
 
     metadata = parse_metadata(ingest_metadata, supabase_collection)
+
+    input_state = get_action_input()
 
     logger.info(
         introduce(
@@ -69,4 +72,16 @@ if __name__ == "__main__":
         doc_embeddings,
         supabase_client=supabase_client,
         db_table=supabase_table,
+    )
+
+    set_action_output(
+        StateMessage(
+            docs=chunks,
+            inputs={
+                "ingest_text": ingest_text_input,
+                "chunk_size": chunk_size,
+                "chunk_overlap": chunk_overlap,
+                "embedding_model": embedding_model,
+            },
+        )
     )
