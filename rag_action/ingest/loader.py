@@ -21,12 +21,6 @@ logger = logging.getLogger(__name__)
 DEFAULT_LOADER_CLASS = "markdown"
 DEFAULT_LOADER_OPTIONS = {"glob_pattern": "**/*.md", "kwargs": {}, "metadata": {}}
 
-DEFAULT_CHUNKER_CLASS = "recursive_character"
-DEFAULT_CHUNKER_OPTIONS = {
-    "chunk_size": 1000,
-    "chunk_overlap": 200,
-    "separators": ["\n\n", "\n", ".", "!", "?", " ", ""],
-}
 
 if __name__ == "__main__":
 
@@ -38,9 +32,9 @@ if __name__ == "__main__":
     loader_class = get_env_var("LOADER_CLASS", default=DEFAULT_LOADER_CLASS)
     loader_options_str = get_env_var("LOADER_OPTIONS", "{}")
     loader_options = DEFAULT_LOADER_OPTIONS | parse_json(loader_options_str)
-    chunker_class = get_env_var("CHUNKER_CLASS", default=DEFAULT_CHUNKER_CLASS)
+    chunker_class = get_env_var("CHUNKER_CLASS")
     chunker_options_str = get_env_var("CHUNKER_OPTIONS", "{}")
-    chunker_options = DEFAULT_CHUNKER_OPTIONS | parse_json(chunker_options_str)
+    chunker_options = parse_json(chunker_options_str)
 
     logger.info(f"OPENAI: model={embedding_model}")
     logger.info(f"SUPABASE: url={supabase_url} table={supabase_table}")

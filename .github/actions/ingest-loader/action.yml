@@ -27,14 +27,14 @@ inputs:
     description: "Options for the loader class"
     required: false
     default: "{}"
-  chunk_class:
+  chunker_class:
     description: "Chunk class for text splitting"
     required: false
-    default: "RecursiveCharacterTextSplitter"
+    default: "recursive_character"
   chunker_options:
     description: "Options for the chunker class"
     required: false
-    default: "{}"
+    default: '{"chunk_size": 1000, "chunk_overlap": 200}'
   metadata:
     description: "Metadata for the ingestion"
     required: false
