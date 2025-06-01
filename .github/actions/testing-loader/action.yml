@@ -1,0 +1,16 @@
+name: "Testing Loader"
+description: "Testing Loader"
+author: "JingleManSweep"
+
+inputs:
+  state_json:
+    description: "JSON state from previous steps"
+    required: false
+    default: "{}"
+
+runs:
+  using: docker
+  image: docker://ghcr.io/jinglemansweep/rag-actions:main
+  env:
+    STATE_JSON: ${{ inputs.state_json }}
+  args: ["-m", "rag_action.testing.loader"]

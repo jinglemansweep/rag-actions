@@ -1,0 +1,31 @@
+name: "Tests: Testing"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+
+  TestingLoader:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Testing Loader
+        id: main
+        uses: jinglemansweep/rag-actions/.github/actions/testing-loader@main
+        with:
+          state_json: '{"inputs": {"directory": ""}'
