@@ -16,3 +16,5 @@ RUN . /venv/bin/activate && /venv/bin/poetry install --no-root
 COPY . ${WORKDIR}/
 
 ENTRYPOINT ["/venv/bin/python"]
+
+LABEL org.opencontainers.image.source https://github.com/jinglemansweep/rag-actions
