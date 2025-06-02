@@ -26,6 +26,7 @@ feedparser = "^6.0.11"
 newspaper3k = "^0.2.8"
 listparser = "^0.20"
 lxml = {extras = ["html-clean"], version = "^5.4.0"}
+beautifulsoup4 = "^4.13.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"

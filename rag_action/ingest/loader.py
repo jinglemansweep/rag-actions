@@ -1,5 +1,9 @@
 import logging
-from langchain_community.document_loaders import DirectoryLoader, RSSFeedLoader
+from langchain_community.document_loaders import (
+    DirectoryLoader,
+    RSSFeedLoader,
+    WebBaseLoader,
+)
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from ..config import get_env_var
 from ..logger import setup_logger
@@ -17,8 +21,11 @@ from ..utils import parse_json
 setup_logger()
 logger = logging.getLogger(__name__)
 
-LOADERS_MAP = {"rss": RSSFeedLoader, "markdown": MarkdownFrontmatterLoader}
-
+LOADERS_MAP = {
+    "rss": RSSFeedLoader,
+    "markdown": MarkdownFrontmatterLoader,
+    "web": WebBaseLoader,
+}
 CHUNKERS_MAP = {"recursive_character": RecursiveCharacterTextSplitter}
 
 if __name__ == "__main__":
