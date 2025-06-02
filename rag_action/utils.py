@@ -15,3 +15,16 @@ def parse_json(json_str: str) -> Dict:
     except json.JSONDecodeError as e:
         logger.warning(f"Invalid JSON in metadata: {e}")
         return {}
+
+
+def write_file(file_path: str, content: str) -> None:
+    """
+    Write content to a file.
+    """
+    try:
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(content)
+        logger.info(f"File written successfully: {file_path}")
+    except Exception as e:
+        logger.error(f"Failed to write file {file_path}: {e}")
+        raise

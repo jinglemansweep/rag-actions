@@ -4,13 +4,14 @@ import logging
 import os
 import re
 import yaml
-from langchain import hub
 from langchain_core.documents import Document
+from langchain_core.prompts import PromptTemplate
 from langchain.chat_models import init_chat_model
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import TextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain.document_loaders.base import BaseLoader
+
 from supabase import Client  # type: ignore
 from typing import Any, Dict, List, Optional
 
@@ -40,14 +41,22 @@ class MarkdownFrontmatterLoader(BaseLoader):
         return [Document(page_content=body.strip(), metadata=metadata)]
 
 
-def model_chat(question: str, context: str, model: str) -> str:
+def build_chat_prompt(prompt: str) -> PromptTemplate:
+    """
+    Build the prompt for the chat model.
+    """
+    rag_prompt = "Question: {question}\nContext: {context}\nAnswer:"
+    return PromptTemplate.from_template(prompt + "\n" + rag_prompt)
+
+
+def model_chat(prompt: str, question: str, context: str, model: str) -> str:
     """
     Perform a chat with the model.
     """
     os.environ["LANGCHAIN_API_KEY"] = "dummy_key"
-    prompt = hub.pull("rlm/rag-prompt")
+    chat_prompt = build_chat_prompt(prompt)
     llm = init_chat_model(model=model)
-    messages = prompt.invoke({"question": question, "context": context})
+    messages = chat_prompt.invoke({"question": question, "context": context})
     response = llm.invoke(messages)
     return response.content
 

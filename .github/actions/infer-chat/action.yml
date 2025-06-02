@@ -31,13 +31,20 @@ inputs:
     description: "Supabase filter for the query"
     required: false
     default: "{}"
-  query:
+  rag_query:
     description: "Query to run against the RAG system"
+    required: true
+  question:
+    description: "Question to ask the LLM"
     required: true
   top_k:
     description: "Number of top results to return"
     required: false
     default: "5"
+  output_file:
+    description: "File to write the response to"
+    required: true
+
 
 runs:
   using: docker
@@ -52,6 +59,8 @@ runs:
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
     SUPABASE_FILTER: ${{ inputs.supabase_filter }}
-    QUERY: ${{ inputs.query }}
+    RAG_QUERY: ${{ inputs.rag_query }}
+    QUESTION: ${{ inputs.question }}
     TOP_K: ${{ inputs.top_k }}
+    OUTPUT_FILE: ${{ inputs.output_file }}
   args: ["-m", "rag_action.infer.chat"]

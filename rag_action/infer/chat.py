@@ -8,7 +8,7 @@ from ..rag import (
     supabase_query,
 )
 from ..supabase import create_client as create_supabase_client
-from ..utils import parse_json
+from ..utils import parse_json, write_file
 
 setup_logger()
 logger = logging.getLogger(__name__)
@@ -21,11 +21,13 @@ if __name__ == "__main__":
     supabase_table = get_env_var("SUPABASE_TABLE")
     supabase_filter_str = get_env_var("SUPABASE_FILTER", "{}")
     supabase_filter = parse_json(supabase_filter_str)
-    query = get_env_var("QUERY")
-    top_k = int(get_env_var("TOP_K"))
     chat_model = get_env_var("CHAT_MODEL")
     chat_prompt = get_env_var("CHAT_PROMPT")
     embedding_model = get_env_var("EMBEDDING_MODEL")
+    rag_query = get_env_var("RAG_QUERY", None)
+    question = get_env_var("QUESTION")
+    top_k = int(get_env_var("TOP_K"))
+    output_file = get_env_var("OUTPUT_FILE")
 
     logger.info(
         f"OPENAI: chat_model={chat_model} embedding_model={embedding_model} chat_prompt={chat_prompt[:40]}..."
@@ -33,7 +35,8 @@ if __name__ == "__main__":
     logger.info(
         f"SUPABASE: url={supabase_url} table={supabase_table} filter={supabase_filter}"
     )
-    logger.info(f"ACTION: query={query} top_k={top_k}")
+    logger.info(f"RAG: query={rag_query} top_k={top_k}")
+    logger.info(f"ACTION: question={question} output_file={output_file}")
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key
@@ -42,7 +45,7 @@ if __name__ == "__main__":
     supabase_client = create_supabase_client(supabase_url, supabase_key)
 
     docs = supabase_query(
-        query,
+        rag_query,
         supabase_client,
         supabase_table,
         openai_embeddings,
@@ -51,6 +54,8 @@ if __name__ == "__main__":
     )
     formatted_docs = format_rag_documents(docs)
 
-    response = model_chat(chat_prompt, formatted_docs, chat_model)
+    response = model_chat(chat_prompt, question, formatted_docs, chat_model)
 
     logger.info(f"Response: {response}")
+
+    write_file(output_file, response)

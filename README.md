@@ -111,6 +111,7 @@ Inputs:
 * `chat_prompt`: Chat prompt *(default: `You are a helpful assistant. Answer the question based on the provided context.`)*
 * `query`: Query for RAG retrieval
 * `top_k`: Number of top results to return *(default: `5`)*
+* `output_file`: Output file path
 
 Chat Example:
 
@@ -126,3 +127,4 @@ Chat Example:
           chat_prompt: "You are a helpful assistant. Answer the question based on the provided context."
           query: "UK News"
           top_k: "5"
+          output_file: "./uknews.md

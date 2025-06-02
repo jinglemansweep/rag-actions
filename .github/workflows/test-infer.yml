@@ -36,3 +36,4 @@ jobs:
           chat_prompt: "You are a helpful assistant. Answer the question based on the provided context."
           query: "UK News"
           top_k: "5"
+          output_file: "./uk_news.md"
