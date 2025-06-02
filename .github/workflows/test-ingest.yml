@@ -15,7 +15,7 @@ permissions:
 
 jobs:
 
-  IngestLoaderDirectory:
+  IngestionTests:
 
     runs-on: ubuntu-latest
 

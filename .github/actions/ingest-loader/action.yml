@@ -43,6 +43,10 @@ inputs:
     description: "Chunker arguments"
     required: false
     default: '{"chunk_size": 1000, "chunk_overlap": 200}'
+  user_agent:
+    description: "User agent for web requests"
+    required: false
+    default: "Mozilla/5.0 (X11; Linux i686; rv:139.0) Gecko/20100101 Firefox/139.0"
 
 
 runs:
@@ -62,4 +66,5 @@ runs:
     LOADER_ARGS: ${{ inputs.loader_args }}
     CHUNKER_CLASS: ${{ inputs.chunker_class }}
     CHUNKER_ARGS: ${{ inputs.chunker_args }}
+    USER_AGENT: ${{ inputs.user_agent }}
   args: ["-m", "rag_action.ingest.loader"]

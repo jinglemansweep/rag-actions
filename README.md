@@ -75,3 +75,22 @@ RSS Feed Example:
                 "https://feeds.bbci.co.uk/news/rss.xml"
               ]
             }
+
+Web Page Example:
+
+      - name: Web Page Ingestion
+        uses: jinglemansweep/rag-actions/.github/actions/ingest-loader@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          metadata: |
+            {
+              "collection": "${{ vars.SUPABASE_COLLECTION }}"
+            }
+          loader_class: "web"
+          loader_args: |
+            {
+              "web_path": "https://www.bbc.co.uk"
+            }
