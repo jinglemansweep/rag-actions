@@ -26,6 +26,7 @@ Inputs:
 * `loader_args`: Document loader class arguments *(default: `{}`)*
 * `chunker_class`: Chunker class alias *(default: `recursive_character`)*
 * `chunker_args`: Chunker class arguments *(default: `{"chunk_size": 1000, "chunk_overlap": 200}`)*
+* `user_agent`: User agent string *(default: recent Firefox/Linux)*
 
 Markdown Directory Example:
 
