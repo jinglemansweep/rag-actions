@@ -1,0 +1,40 @@
+name: "Tests: Inferrence"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+
+  InferrenceTests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Chat
+        uses: jinglemansweep/rag-actions/.github/actions/infer-chat@main
+        with:
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          supabase_url: ${{ secrets.SUPABASE_URL }}
+          supabase_key: ${{ secrets.SUPABASE_KEY }}
+          supabase_table: ${{ vars.SUPABASE_TABLE }}
+          supabase_filter: |
+            {
+              "source": "web"
+            }
+          chat_model: "gpt-4o-mini"
+          chat_prompt: "You are a helpful assistant. Answer the question based on the provided context."
+          top_k: "5"

@@ -1,17 +1,18 @@
 import hashlib
 import json
 import logging
+import os
 import re
 import yaml
+from langchain import hub
 from langchain_core.documents import Document
-from langchain_core.messages import BaseMessage
 from langchain.chat_models import init_chat_model
 from langchain_community.vectorstores import SupabaseVectorStore
 from langchain.text_splitter import TextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
 from langchain.document_loaders.base import BaseLoader
 from supabase import Client  # type: ignore
-from typing import List
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -39,13 +40,16 @@ class MarkdownFrontmatterLoader(BaseLoader):
         return [Document(page_content=body.strip(), metadata=metadata)]
 
 
-def model_chat(prompt: str, chat_model: str) -> BaseMessage:
+def model_chat(question: str, context: str, model: str) -> str:
     """
     Perform a chat with the model.
     """
-    llm = init_chat_model(model=chat_model)
-    response = llm.invoke(prompt)
-    return response
+    os.environ["LANGCHAIN_API_KEY"] = "dummy_key"
+    prompt = hub.pull("rlm/rag-prompt")
+    llm = init_chat_model(model=model)
+    messages = prompt.invoke({"question": question, "context": context})
+    response = llm.invoke(messages)
+    return response.content
 
 
 def apply_metadata(docs: List[Document], metadata: dict) -> List[Document]:
@@ -80,6 +84,18 @@ def get_openai_embeddings(model: str, api_key: str) -> OpenAIEmbeddings:
     return OpenAIEmbeddings(model=model, api_key=api_key)
 
 
+def format_rag_documents(docs: List[Document]) -> str:
+    """
+    Format a list of Document objects into a string for RAG.
+    """
+    formatted_docs = []
+    for doc in docs:
+        metadata_str = json.dumps(doc.metadata, separators=(",", ":"), indent=None)
+        content_str = doc.page_content.replace("\n", " ").strip()
+        formatted_docs.append(f"Content:\n{content_str}\n\nMetadata: {metadata_str}")
+    return "\n\n\n".join(formatted_docs)
+
+
 def build_document_embeddings(
     docs: List[Document], embeddings: OpenAIEmbeddings
 ) -> List[List[float]]:
@@ -96,20 +112,12 @@ def compute_chunk_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def build_metadata_filter(db_collection: str) -> dict:
-    """
-    Build a filter for querying documents.
-    This can be customized based on your requirements.
-    """
-    return {"_collection": db_collection}
-
-
 def supabase_query(
     query: str,
     supabase_client: Client,
     db_table: str,
-    db_collection: str,
     embeddings: OpenAIEmbeddings,
+    filter: Optional[Dict[str, Any]] = None,
     top_k: int = 5,
 ) -> List[Document]:
     """
@@ -121,10 +129,9 @@ def supabase_query(
         embedding=embeddings,
         query_name="match_documents",
     )
-    filter = build_metadata_filter(db_collection)
     docs = vectorstore.similarity_search(query, top_k, filter)
     logger.info(
-        f"Vector Store Query: table='{db_table}' collection='{db_collection}' query='{query}' top_k={top_k} found={len(docs)}"
+        f"Vector Store Query: table='{db_table}' query='{query}' filter={filter} top_k={top_k} found={len(docs)}"
     )
     return docs
 

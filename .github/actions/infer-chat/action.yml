@@ -1,0 +1,53 @@
+name: "Infer Chat"
+description: "Run an LLM prompt against a RAG query"
+author: "JingleManSweep"
+
+inputs:
+  openai_api_key:
+    description: "OpenAI API Key"
+    required: true
+  embedding_model:
+    description: "OpenAI Embedding model name"
+    required: false
+    default: "text-embedding-ada-002"
+  chat_model:
+    description: "OpenAI Chat model name"
+    required: false
+    default: "gpt-4o-mini"
+  chat_prompt:
+    description: "Chat prompt for the LLM"
+    required: false
+    default: "You are a helpful assistant. Answer the question based on the provided context."
+  supabase_url:
+    description: "Supabase instance URL"
+    required: true
+  supabase_key:
+    description: "Supabase service role key"
+    required: true
+  supabase_table:
+    description: "Supabase table name"
+    required: true
+  supabase_filter:
+    description: "Supabase filter for the query"
+    required: false
+    default: "{}"
+  top_k:
+    description: "Number of top results to return"
+    required: false
+    default: "5"
+
+runs:
+  using: docker
+  image: ../../../Dockerfile
+  # image: docker://ghcr.io/jinglemansweep/rag-actions:main
+  env:
+    OPENAI_API_KEY: ${{ inputs.openai_api_key }}
+    EMBEDDING_MODEL: ${{ inputs.embedding_model }}
+    CHAT_MODEL: ${{ inputs.chat_model }}
+    CHAT_PROMPT: ${{ inputs.chat_prompt }}
+    SUPABASE_URL: ${{ inputs.supabase_url }}
+    SUPABASE_KEY: ${{ inputs.supabase_key }}
+    SUPABASE_TABLE: ${{ inputs.supabase_table }}
+    SUPABASE_FILTER: ${{ inputs.supabase_filter }}
+    TOP_K: ${{ inputs.top_k }}
+  args: ["-m", "rag_action.infer.chat"]
