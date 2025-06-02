@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from typing import Dict
 
 
@@ -21,6 +22,7 @@ def write_file(file_path: str, content: str) -> None:
     """
     Write content to a file.
     """
+    logger.info(f"CWD: {os.getcwd()}")
     try:
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(content)
