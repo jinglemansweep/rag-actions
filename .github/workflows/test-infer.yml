@@ -40,4 +40,6 @@ jobs:
 
       - name: Verify Output
         run: |
+          pwd
+          ls -la .
           cat ./uk_news.md
