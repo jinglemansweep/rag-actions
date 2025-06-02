@@ -37,3 +37,7 @@ jobs:
           query: "UK News"
           top_k: "5"
           output_file: "./uk_news.md"
+
+      - name: Verify Output
+        run: |
+          cat ./uk_news.md
