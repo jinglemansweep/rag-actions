@@ -21,6 +21,7 @@ if __name__ == "__main__":
     supabase_table = get_env_var("SUPABASE_TABLE")
     supabase_filter_str = get_env_var("SUPABASE_FILTER", "{}")
     supabase_filter = parse_json(supabase_filter_str)
+    query = get_env_var("QUERY")
     top_k = int(get_env_var("TOP_K"))
     chat_model = get_env_var("CHAT_MODEL")
     chat_prompt = get_env_var("CHAT_PROMPT")
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     logger.info(
         f"SUPABASE: url={supabase_url} table={supabase_table} filter={supabase_filter}"
     )
-    logger.info(f"ACTION: top_k={top_k}")
+    logger.info(f"ACTION: query={query} top_k={top_k}")
 
     openai_embeddings = get_openai_embeddings(
         model=embedding_model, api_key=openai_api_key
@@ -41,7 +42,7 @@ if __name__ == "__main__":
     supabase_client = create_supabase_client(supabase_url, supabase_key)
 
     docs = supabase_query(
-        chat_prompt,
+        query,
         supabase_client,
         supabase_table,
         openai_embeddings,

@@ -31,6 +31,9 @@ inputs:
     description: "Supabase filter for the query"
     required: false
     default: "{}"
+  query:
+    description: "Query to run against the RAG system"
+    required: true
   top_k:
     description: "Number of top results to return"
     required: false
@@ -49,5 +52,6 @@ runs:
     SUPABASE_KEY: ${{ inputs.supabase_key }}
     SUPABASE_TABLE: ${{ inputs.supabase_table }}
     SUPABASE_FILTER: ${{ inputs.supabase_filter }}
+    QUERY: ${{ inputs.query }}
     TOP_K: ${{ inputs.top_k }}
   args: ["-m", "rag_action.infer.chat"]
