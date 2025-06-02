@@ -33,7 +33,7 @@ jobs:
           supabase_table: ${{ vars.SUPABASE_TABLE }}
           supabase_filter: '{"collection": "${{ vars.SUPABASE_COLLECTION }}"}'
           chat_model: "gpt-4o-mini"
-          chat_prompt: "You are a helpful assistant. Answer the question based on the provided context. Speak like a Pirate. Output in Markdown format."
+          chat_prompt: "You are a helpful assistant. Answer the question based on the provided context. Speak like a Pirate. Output lots of details using Markdown headings and bullet points."
           rag_query: "UK News"
           question: "What has happened in the UK recently?"
           top_k: "5"
